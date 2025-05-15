@@ -1,0 +1,51 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(#FEF5F0, #F5BBD3);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.diaryImg {
+  height: auto;
+  object-fit: contain;
+}
+
+.overlay {
+  position: absolute; /* 이미지 위로 띄움 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  font-size: 80px;
+  color: #7D7D7D;
+  font-weight: 500;
+  margin-bottom: 50px;
+}
+
+.startBtn {
+  background-color: #F9BCC1;
+  border: none;
+  border-radius: 30px;
+  padding: 20px 200px;
+  font-size: 18px;
+  font-weight: 300;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.startBtn:hover {
+  background-color: #f79eae;
+}
