@@ -5,7 +5,7 @@ const Start= () => {
     const navigate = useNavigate();
     
     return (
-        <html className='startp'>
+        <div className='startp'>
         <div className="container">
             <img src="/img/diarypage.png" alt="diary" className="diaryImg" />
             <div className="overlay">
@@ -14,7 +14,7 @@ const Start= () => {
             </div>
             </div>
             
-     </html>
+     </div>
 
     );
 };

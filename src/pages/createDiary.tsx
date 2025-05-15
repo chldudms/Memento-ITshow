@@ -1,0 +1,64 @@
+import React, { useState } from 'react';
+import '../styles/creatediary.css'
+import Header from '../components/header';
+
+
+const CreateDiary = () => {
+    const [diaryTitle, setTitle] = useState('');
+    const [coverColor, setColor] = useState('#AFAFAF')
+    const [strapColor, setStrap] = useState('#5e5e5e')
+    const [hashtag,setHash] = useState('')
+
+    const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
+    const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
+    const hashs= ["#일상기록", "#추억", "#감정일기","#특별한일"]
+
+    function chgCoverColor(color:string){
+      setColor(color)
+      var i = colors.indexOf(color)
+      console.log(color)
+        setStrap(strapColors[i]);
+        }
+
+    return (
+        <div className='diary'>
+            <Header/>
+            <div className='options'>
+                <p>다이어리 제목</p>
+                <input type='text' className='diaryTitle' placeholder="다이어리의 제목을 입력해주세요." 
+                    value={diaryTitle} onChange={(e)=>setTitle(e.target.value)}/>
+
+                <p>커버 색상</p>
+                <div className="colorGrid">
+                    {colors.map((color, i) => (
+                        <button
+                            key={i}
+                            className="colorBtn"
+                            style={{ backgroundColor: color }}
+                            onClick={()=>chgCoverColor(color)}
+                        />
+                    ))}
+
+                </div>
+                <p>해시 태그</p>
+                <div className='hashtags'>
+                    {hashs.map((hash, i) => (
+                        <div
+                            onClick={()=>setHash(hash)}>{hash}</div>
+                    ))}
+                </div>
+
+                <p>스티커</p>
+                
+            </div>
+            <div className='diaryCover' >
+                <div className='Cover' style={{ background: coverColor }} />
+                <div className='strap' style={{ background: strapColor }} />
+            <div className='label' />
+           </div>
+        </div>
+
+    );
+};
+
+export default CreateDiary;

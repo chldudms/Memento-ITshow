@@ -1,0 +1,111 @@
+.options{
+    position: absolute;
+    top: 160px;
+    size: 30px;
+    left: 330px;
+    font-size: 30px;
+}
+
+.diaryTitle{
+    width: 400px;
+    font-size: 20px;
+        color: #222222;
+        width: 300px;
+        border: none;
+        border-bottom: solid #aaaaaa 1px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        position: relative;
+        background: none;
+        z-index: 5;
+}
+input::placeholder {
+    color: #aaaaaa;
+}
+
+input:focus {
+    outline: none;
+}
+
+.pinkBtn{
+    width: 50px;
+    height: 50px;
+    background-color: pink;
+}.colorGrid {
+    position: relative;
+    right:40px;
+    display: grid;
+    grid-template-columns: repeat(4, 55px); /*  4개씩 간격 - */
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.colorBtn {
+    position:relative;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+
+.Cover{
+    position: fixed;
+    top: 270px;
+    right: 330px;
+    width: 430px;
+    height: 600px;
+    background-color: #AFAFAF;
+    border-radius: 15px;
+}
+
+.strap{
+    position: fixed;
+    top: 270px;
+    right: 730px;
+    width: 32px;
+    height: 600px;
+    background-color: #5e5e5e;
+    border-radius: 15px;
+}
+
+.label{
+    position: fixed;
+    top:316px;
+    right: 400px;
+    width: 270px;
+    height: 80px;
+    background-color: white;
+     border-radius: 15px;
+
+}
+
+.hashtags {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* <- 이렇게! */
+    gap: 8px;
+    /* 해시태그 사이 간격 */
+    margin-top: 8px;
+}
+
+.hashtags div {
+    background-color: #fffdf0;
+    border: 2px solid #FFD447;
+    border-radius: 20px;
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+    color: #444;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.hashtags div:hover {
+  background-color: #ffe999;
+}
