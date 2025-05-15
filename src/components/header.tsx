@@ -4,7 +4,7 @@ import '../styles/header.css'
 const Header = () => {
     return (
         <div className='bar'>
-            <h2 className='logo'>MEMENTO</h2>
+            <h2 className='headerLogo'>MEMENTO</h2>
        </div> 
     )};
 

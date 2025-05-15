@@ -1,4 +1,4 @@
-body, html {
+.startp {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -31,7 +31,7 @@ body, html {
   font-size: 80px;
   color: #7D7D7D;
   font-weight: 500;
-  margin-bottom: 50px;
+  margin-bottom:80px;
 }
 
 .startBtn {
