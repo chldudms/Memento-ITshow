@@ -1,17 +1,11 @@
 import React from 'react';
+import '../styles/header.css'
 
 const Header = () => {
     return (
-        <header>
-            <h1>메멘토</h1>
-            <nav>
-                <ul>
-                    <li><a href="/">홈</a></li>
-                    <li><a href="/diary">일기</a></li>
-                </ul>
-            </nav>
-        </header>
-    );
-};
+        <div className='bar'>
+            <h2 className='headerLogo'>MEMENTO</h2>
+       </div> 
+    )};
 
 export default Header;
