@@ -8,10 +8,14 @@ const CreateDiary = () => {
     const [coverColor, setColor] = useState('#AFAFAF')
     const [strapColor, setStrap] = useState('#5e5e5e')
     const [hashtag,setHash] = useState('')
+    const [showSticker,setSticker] =useState('none')
+    const [stickerShape, setShape] = useState('smile')
+
 
     const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
     const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
     const hashs= ["#일상기록", "#추억", "#감정일기","#특별한일"]
+    const stickers = ["smile", "cry", "sad", "lovely", "thinking","star"];
 
     function chgCoverColor(color:string){
       setColor(color)
@@ -20,6 +24,11 @@ const CreateDiary = () => {
         setStrap(strapColors[i]);
         }
 
+    function putSticker(sticker:string){
+        setSticker('block')
+        setShape(sticker)
+    }
+    
     return (
         <div className='diary'>
             <Header/>
@@ -49,8 +58,18 @@ const CreateDiary = () => {
                 </div>
 
                 <p>스티커</p>
-                
-            </div>
+                <div className='board' />
+                <div className='sticker'>
+                    {stickers.map((sticker,i)=>(
+                        <img src={`img/${sticker}.png`} className='stickers' onClick={()=>putSticker(sticker)}/>
+                    ))}
+                    
+                </div>
+                </div>
+            <img src={`img/${stickerShape}.png`} className='smileEx' style={{ display: showSticker }} />
+
+       
+
             <div className='diaryCover' >
                 <div className='Cover' style={{ background: coverColor }} />
                 <div className='strap' style={{ background: strapColor }} />
