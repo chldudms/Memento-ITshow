@@ -1,16 +1,16 @@
 .options{
     position: absolute;
-    top: 160px;
+    top: 100px;
     size: 30px;
     left: 330px;
-    font-size: 30px;
+    font-size: 26px;
 }
 
-.diaryTitle{
+input{
     width: 400px;
     font-size: 20px;
         color: #222222;
-        width: 300px;
+        width: 400px;
         border: none;
         border-bottom: solid #aaaaaa 1px;
         padding-bottom: 10px;
@@ -158,4 +158,21 @@ input:focus {
     transition: transform 0.2s ease;
     z-index: 10;
    
+}
+
+.diaryKey{
+  
+}
+
+
+.diaryCreateBtn{
+    position: absolute;
+    color: #ffff;
+    font-size: 18px;
+    width: 220px;
+    height: 60px;
+    background-color: #222222;
+    top: 930px;
+    left: 1500px;
+    border-radius: 20px;
 }

@@ -10,6 +10,7 @@ const CreateDiary = () => {
     const [hashtag,setHash] = useState('')
     const [showSticker,setSticker] =useState('none')
     const [stickerShape, setShape] = useState('smile')
+    const [diaryKey, setKey] = useState('')
 
 
     const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
@@ -65,7 +66,16 @@ const CreateDiary = () => {
                     ))}
                     
                 </div>
+
+                <p>다이어리 암호 설정 (선택)</p>
+                <div >
+                    <input type='number' className='diaryKey' placeholder='다이어리의 암호를 입력해주세요. (최대 4자리)'
+                    value={diaryKey} onChange={(e)=>setKey(e.target.value)}/>
                 </div>
+                
+
+                </div>
+
             <img src={`img/${stickerShape}.png`} className='smileEx' style={{ display: showSticker }} />
 
        
@@ -75,6 +85,8 @@ const CreateDiary = () => {
                 <div className='strap' style={{ background: strapColor }} />
             <div className='label' />
            </div>
+
+           <button className='diaryCreateBtn' type='submit'>완료</button>
         </div>
 
     );
