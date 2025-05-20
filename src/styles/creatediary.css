@@ -1,16 +1,16 @@
 .options{
     position: absolute;
-    top: 160px;
+    top: 100px;
     size: 30px;
     left: 330px;
-    font-size: 30px;
+    font-size: 26px;
 }
 
-.diaryTitle{
+input{
     width: 400px;
     font-size: 20px;
         color: #222222;
-        width: 300px;
+        width: 400px;
         border: none;
         border-bottom: solid #aaaaaa 1px;
         padding-bottom: 10px;
@@ -27,11 +27,7 @@ input:focus {
     outline: none;
 }
 
-.pinkBtn{
-    width: 50px;
-    height: 50px;
-    background-color: pink;
-}.colorGrid {
+.colorGrid {
     position: relative;
     right:40px;
     display: grid;
@@ -52,7 +48,18 @@ input:focus {
     transition: transform 0.2s ease;
 }
 
-
+.smileEx {
+    background-color: #b50000;
+    position: fixed;
+    bottom: 200px;
+    right: 370px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
 .Cover{
     position: fixed;
     top: 270px;
@@ -108,4 +115,64 @@ input:focus {
 
 .hashtags div:hover {
   background-color: #ffe999;
+}
+
+.board{
+    width: 500px;
+    height: 100px;
+    box-shadow: 1px 1px 5px 1px #cccccc;
+    border-radius: 15px; 
+}
+
+.sticker{
+    position: relative;
+    right: 5px;
+    display: grid;
+    grid-template-columns: repeat(6, 50px);
+    /*  4개씩 간격 - */
+    gap: 30px;
+    justify-content: center;
+}
+
+.stickers{
+    position: relative;
+            bottom: 80px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+}
+
+.smileEx {
+    background-color: #FFD447;
+    position: fixed;
+    bottom: 250px;
+    right: 370px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 10;
+   
+}
+
+.diaryKey{
+  
+}
+
+
+.diaryCreateBtn{
+    position: absolute;
+    color: #ffff;
+    font-size: 18px;
+    width: 220px;
+    height: 60px;
+    background-color: #222222;
+    top: 930px;
+    left: 1500px;
+    border-radius: 20px;
 }
