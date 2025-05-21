@@ -12,7 +12,7 @@ import icon6 from "../assets/color_fill.png";
 
 const WriteDiary = () => {
   return (
-    <div className="container">
+    <div className="write-container">
       <Header/>
       <div className="diary-title">오늘의 다이어리</div>
       {/* 사각형 2개 */}
