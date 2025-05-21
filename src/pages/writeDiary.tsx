@@ -1,4 +1,4 @@
-import React from "react"; 
+import React from "react";
 import '../styles/writediary.css';
 import Header from '../components/header';
 import image1 from "../assets/next_page.png";
@@ -13,7 +13,7 @@ import icon6 from "../assets/color_fill.png";
 const WriteDiary = () => {
   return (
     <div className="write-container">
-      <Header/>
+      <Header />
       <div className="diary-title">오늘의 다이어리</div>
       {/* 사각형 2개 */}
       <div className="background-boxes">
@@ -34,7 +34,7 @@ const WriteDiary = () => {
           {[icon1, icon2, icon3, icon4, icon5, icon6].map((icon, index) => (
             <img key={index} src={icon} alt={`툴아이콘${index}`} className="tool-icon" />
           ))}
-        </div> 
+        </div>
       </div>
       <img
         src={image2}
@@ -43,6 +43,6 @@ const WriteDiary = () => {
       />
     </div>
   );
-}
+};
 
 export default WriteDiary;

@@ -7,36 +7,40 @@ const CreateDiary = () => {
     const [diaryTitle, setTitle] = useState('');
     const [coverColor, setColor] = useState('#AFAFAF')
     const [strapColor, setStrap] = useState('#5e5e5e')
-    const [hashtag,setHash] = useState('')
-    const [showSticker,setSticker] =useState('none')
+    const [hashtag, setHash] = useState('')
+    const [showSticker, setSticker] = useState('none')
     const [stickerShape, setShape] = useState('smile')
     const [diaryKey, setKey] = useState('')
 
-
     const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
     const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
-    const hashs= ["#일상기록", "#추억", "#감정일기","#특별한일"]
-    const stickers = ["smile", "cry", "sad", "lovely", "thinking","star"];
+    const hashs = ["#일상기록", "#추억", "#감정일기", "#특별한일"]
+    const stickers = ["smile", "cry", "sad", "lovely", "thinking", "star"];
 
-    function chgCoverColor(color:string){
-      setColor(color)
-      var i = colors.indexOf(color)
-      console.log(color)
+    function chgCoverColor(color: string) {
+        setColor(color)
+        var i = colors.indexOf(color)
+        console.log(color)
         setStrap(strapColors[i]);
-        }
+    }
 
-    function putSticker(sticker:string){
+    function putSticker(sticker: string) {
         setSticker('block')
         setShape(sticker)
     }
-    
+
     return (
         <div className='diary'>
-            <Header/>
+            <Header />
             <div className='options'>
                 <p>다이어리 제목</p>
-                <input type='text' className='diaryTitle' placeholder="다이어리의 제목을 입력해주세요." 
-                    value={diaryTitle} onChange={(e)=>setTitle(e.target.value)}/>
+                <input
+                    type='text'
+                    className='diaryTitle'
+                    placeholder="다이어리의 제목을 입력해주세요."
+                    value={diaryTitle}
+                    onChange={(e) => setTitle(e.target.value)}
+                />
 
                 <p>커버 색상</p>
                 <div className="colorGrid">
@@ -45,50 +49,57 @@ const CreateDiary = () => {
                             key={i}
                             className="colorBtn"
                             style={{ backgroundColor: color }}
-                            onClick={()=>chgCoverColor(color)}
+                            onClick={() => chgCoverColor(color)}
                         />
                     ))}
-
                 </div>
+
                 <p>해시 태그</p>
                 <div className='hashtags'>
-                    {hashs.map((hash, i) => (
-                        <div
-                            onClick={()=>setHash(hash)}>{hash}</div>
+                    {hashs.map((hash) => (
+                        <div key={hash} onClick={() => setHash(hash)}>{hash}</div>
                     ))}
                 </div>
 
                 <p>스티커</p>
                 <div className='board' />
                 <div className='sticker'>
-                    {stickers.map((sticker,i)=>(
-                        <img src={`img/${sticker}.png`} className='stickers' onClick={()=>putSticker(sticker)}/>
+                    {stickers.map((sticker) => (
+                        <img
+                            key={sticker}
+                            src={`img/${sticker}.png`}
+                            className='stickers'
+                            onClick={() => putSticker(sticker)}
+                        />
                     ))}
-                    
                 </div>
 
                 <p>다이어리 암호 설정 (선택)</p>
-                <div >
-                    <input type='number' className='diaryKey' placeholder='다이어리의 암호를 입력해주세요. (최대 4자리)'
-                    value={diaryKey} onChange={(e)=>setKey(e.target.value)}/>
+                <div>
+                    <input
+                        type='number'
+                        className='diaryKey'
+                        placeholder='다이어리의 암호를 입력해주세요. (최대 4자리)'
+                        value={diaryKey}
+                        onChange={(e) => setKey(e.target.value)}
+                    />
                 </div>
-                
+            </div>
 
-                </div>
+            <img
+                src={`img/${stickerShape}.png`}
+                className='smileEx'
+                style={{ display: showSticker }}
+            />
 
-            <img src={`img/${stickerShape}.png`} className='smileEx' style={{ display: showSticker }} />
-
-       
-
-            <div className='diaryCover' >
+            <div className='diaryCover'>
                 <div className='Cover' style={{ background: coverColor }} />
                 <div className='strap' style={{ background: strapColor }} />
-            <div className='label' />
-           </div>
+                <div className='label' />
+            </div>
 
-           <button className='diaryCreateBtn' type='submit'>완료</button>
+            <button className='diaryCreateBtn' type='submit'>완료</button>
         </div>
-
     );
 };
 
