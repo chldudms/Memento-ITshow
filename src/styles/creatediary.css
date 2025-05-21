@@ -1,4 +1,4 @@
-.options{
+.options {
     position: absolute;
     top: 100px;
     size: 30px;
@@ -6,19 +6,20 @@
     font-size: 26px;
 }
 
-input{
+input {
     width: 400px;
     font-size: 20px;
-        color: #222222;
-        width: 400px;
-        border: none;
-        border-bottom: solid #aaaaaa 1px;
-        padding-bottom: 10px;
-        padding-left: 10px;
-        position: relative;
-        background: none;
-        z-index: 5;
+    color: #222222;
+    width: 400px;
+    border: none;
+    border-bottom: solid #aaaaaa 1px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    position: relative;
+    background: none;
+    z-index: 5;
 }
+
 input::placeholder {
     color: #aaaaaa;
 }
@@ -29,16 +30,17 @@ input:focus {
 
 .colorGrid {
     position: relative;
-    right:40px;
+    right: 40px;
     display: grid;
-    grid-template-columns: repeat(4, 55px); /*  4개씩 간격 - */
+    grid-template-columns: repeat(4, 55px);
+    /*  4개씩 간격 - */
     gap: 15px;
     margin-top: 20px;
     justify-content: center;
 }
 
 .colorBtn {
-    position:relative;
+    position: relative;
     right: 50px;
     width: 60px;
     height: 60px;
@@ -60,7 +62,8 @@ input:focus {
     cursor: pointer;
     transition: transform 0.2s ease;
 }
-.Cover{
+
+.Cover {
     position: fixed;
     top: 270px;
     right: 330px;
@@ -70,7 +73,7 @@ input:focus {
     border-radius: 15px;
 }
 
-.strap{
+.strap {
     position: fixed;
     top: 270px;
     right: 730px;
@@ -80,14 +83,14 @@ input:focus {
     border-radius: 15px;
 }
 
-.label{
+.label {
     position: fixed;
-    top:316px;
+    top: 316px;
     right: 400px;
     width: 270px;
     height: 80px;
     background-color: white;
-     border-radius: 15px;
+    border-radius: 15px;
 
 }
 
@@ -114,17 +117,17 @@ input:focus {
 }
 
 .hashtags div:hover {
-  background-color: #ffe999;
+    background-color: #ffe999;
 }
 
-.board{
+.board {
     width: 500px;
     height: 100px;
     box-shadow: 1px 1px 5px 1px #cccccc;
-    border-radius: 15px; 
+    border-radius: 15px;
 }
 
-.sticker{
+.sticker {
     position: relative;
     right: 5px;
     display: grid;
@@ -134,15 +137,15 @@ input:focus {
     justify-content: center;
 }
 
-.stickers{
+.stickers {
     position: relative;
-            bottom: 80px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+    bottom: 80px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
 .smileEx {
@@ -157,15 +160,12 @@ input:focus {
     cursor: pointer;
     transition: transform 0.2s ease;
     z-index: 10;
-   
+
 }
 
-.diaryKey{
-  
-}
+.diaryKey {}
 
-
-.diaryCreateBtn{
+.diaryCreateBtn {
     position: absolute;
     color: #ffff;
     font-size: 18px;
