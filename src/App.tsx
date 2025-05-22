@@ -4,6 +4,7 @@ import Start from './pages/start';
 import Home from './pages/home';
 import CreateDiary from './pages/createDiary'
 import WriteDiary from './pages/writeDiary'
+import DownloadDiary from './pages/downloadDiary'
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/createDiary" element={<CreateDiary />} />
         <Route path="/writeDiary" element={<WriteDiary />} />
+        <Route path="/downloadDiary" element={<DownloadDiary />} />
       </Routes>
     </Router>
   );
