@@ -9,8 +9,8 @@
 
 .background-boxes {
   position: absolute;
-  top: 210px;
-  left: 46%;
+  top: 291px;
+  left: 45%;
   transform: translateX(-50%);
   width: 90%;
   height: 80%;
@@ -21,8 +21,8 @@
 
 .diary-title {
   position: relative;
-  top: 11%;
-  left: 11.8%;
+  top: 18%;
+  left: 17.3%;
   font-size: 28px;
   font-weight: bold;
   margin-top: 24px;
@@ -38,8 +38,8 @@
 }
 
 .box {
-  width: 38%;
-  height: 85%;
+  width: 530.15px;
+  height: 583.31px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -50,7 +50,7 @@
 
 .next-page-image {
   position: absolute;
-  top: 350px;
+  top: 266px;
   right: 16px;
   width: 50px;
   height: 50px;
@@ -59,13 +59,13 @@
 
 .toolbar {
   position: fixed;
-  top: 210px;
-  right: 223px;
-  width: 120px;
-  height: 720px;
+  top: 291px;
+  right: 338px;
+  width: 149.48px;
+  height: 568px;
   background-color: #FEF0F6;
   border-radius: 7px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   padding: 8px 0;
   z-index: 900;
 }
@@ -94,8 +94,8 @@
 
 .complete-image {
   position: absolute;
-  top: 90%;
-  left: 86.5%;
+  top: 84%;
+  left: 80.7%;
   width: 40px;
   height: 40px;
   object-fit: contain;
