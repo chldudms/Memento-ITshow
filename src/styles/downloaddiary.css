@@ -44,7 +44,7 @@
     border-radius: 15px;
 }
 
-input{
+.d-input{
     position: fixed;
     top: 63%;
     left: 38%;
@@ -52,14 +52,14 @@ input{
     border-color: black;
 }
 
-input::placeholder {
+d-input::placeholder {
     position: fixed;
     left: -2px;
     color: #D9D9D9;
     font-size: 24px;
 }
 
-button{
+.d-button{
     position: fixed;
     top: 70%;
     left: 38%;

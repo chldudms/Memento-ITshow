@@ -10,8 +10,8 @@ const DownloadDiary = () => {
                 <div className='d-strap' />
                 <div className='d-label' />
             </div>
-            <input name="email" placeholder="Email"/>
-            <button type="submit">download</button>
+            <input className="d-input" name="email" placeholder="Email"/>
+            <button className="d-button" type="submit">download</button>
         </div>
     );
 };
