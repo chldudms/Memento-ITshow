@@ -9,7 +9,7 @@
 
 .background-boxes {
   position: absolute;
-  top: 291px;
+  top: 215px;
   left: 45%;
   transform: translateX(-50%);
   width: 90%;
@@ -31,10 +31,12 @@
 }
 
 .date-text {
+  position: absolute;
+  top: 16px;
+  left: 16px;
   font-size: 16px;
   font-weight: 500;
   color: #767676;
-  margin: 16px;
 }
 
 .box {
@@ -99,4 +101,13 @@
   width: 40px;
   height: 40px;
   object-fit: contain;
+}
+
+.diary-textbox {
+  width: 90%;
+  height: 100px;
+  margin-top: 10px;
+  padding: 8px;
+  font-size: 16px;
+  resize: none;
 }
