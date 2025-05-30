@@ -1,0 +1,82 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+.text-box-container {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    line-height: 1.6;
+    z-index: 10;
+    touch-action: none;
+    transition: border 0.2s ease;
+}
+
+.text-box-container.selected {
+    border: 2px dashed #aaa;
+}
+
+.drag-handle {
+    display: none;
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    width: 24px;
+    height: 24px;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    z-index: 20;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.text-box-container.selected .drag-handle {
+    display: flex;
+}
+
+.text-box-textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    outline: none;
+    padding: 0;
+    background-color: transparent;
+    color: inherit;
+    font-family: 'Pretendard-Regular';
+    font-size: inherit;
+    line-height: inherit;
+    touch-action: auto;
+    user-select: text;
+    overflow: hidden;
+    white-space: pre-wrap;  
+    word-break: break-word; 
+    overflow-wrap: break-word;
+}
+
+.resize-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize;
+    z-index: 30;
+    user-select: none;
+    touch-action: none;
+    background-color: transparent;
+}
