@@ -5,6 +5,7 @@ import Header from "../components/header";
 import TextBox from "../components/textBox";
 import ColorPicker from "../components/textCustom";
 import DrawCustom from '../components/drawCustom';
+import ImageFile from '../components/imageFile';
 import image1 from "../assets/next_page.png";
 import image2 from "../assets/complete.png";
 import icon1 from "../assets/text.png";
@@ -65,6 +66,31 @@ const WriteDiary = () => {
   // 배경 박스 DOM 참조
   const backgroundBoxesRef = useRef<HTMLDivElement>(null);
 
+  // 파일 입력 ref 추가
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // icon3 클릭 시 파일 탐색기 열기 함수
+  const handleFileIconClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // 업로드된 이미지 목록 상태 관리 (id, 이미지 URL, 부모 영역 구분)
+  const [uploadedImages, setUploadedImages] = useState<{ id: number; url: string; parent: "left" | "right" }[]>([]);
+
+  // 파일 선택 시 실행되는 핸들러
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 선택된 파일 가져오기 (첫 번째 파일만 처리)
+    const file = e.target.files?.[0];
+    if (file) {
+      // 선택된 파일을 임시 URL로 변환
+      const imageUrl = URL.createObjectURL(file);
+      // 기존 이미지 목록에 새 이미지 추가 (기본 부모는 'left'로 지정)
+      setUploadedImages(prev => [...prev, { id: Date.now(), url: imageUrl, parent: "left" }]);
+    }
+    // 같은 파일을 다시 업로드할 수 있게 input 초기화
+    e.target.value = '';
+  };
+
   // 그리기 아이콘 클릭 시, 양쪽 페이지 그리기 모드 활성화 및 툴바 표시
   const handleDrawIconClick = () => {
     setIsDrawingLeft(true);
@@ -89,7 +115,6 @@ const WriteDiary = () => {
       // 클릭한 요소가 선택된 텍스트박스나 커스텀(텍스트) 내부라면 무시
       if (
         drawToolbarRef.current?.contains(target) ||
-        backgroundBoxesRef.current?.contains(target) ||
         selectedBox?.element?.contains(target) ||
         colorPickerRef.current?.contains(target)
       ) {
@@ -187,6 +212,14 @@ const WriteDiary = () => {
         </div>
       )}
 
+      {/* 숨겨진 파일 입력 */}
+      <input
+        type="file"
+        style={{ display: "none" }}
+        ref={fileInputRef}
+        onChange={handleFileChange}
+      />
+
       {/* 다이어리 본문 좌우 페이지 */}
       <div className="background-boxes" style={{ position: "relative" }} ref={backgroundBoxesRef}>
         <div className="box left-box" style={{ position: "relative" }}>
@@ -215,6 +248,7 @@ const WriteDiary = () => {
             // 왼쪽 페이지 그리기 캔버스 표시
             <ReactSketchCanvas
               ref={leftCanvasRef}
+              canvasColor="transparent"
               style={{
                 position: "absolute",
                 top: 0, left: 0, right: 0, bottom: 0,
@@ -240,6 +274,7 @@ const WriteDiary = () => {
               }}
             >
               <DrawCustom
+                ref={drawToolbarRef}
                 selectedColor={selectedColor}
                 setSelectedColor={setSelectedColor}
                 lineWidth={lineWidth}
@@ -250,6 +285,21 @@ const WriteDiary = () => {
               />
             </div>
           )}
+          {/* left 영역에 속한 업로드된 이미지 필터링 후 렌더링 */}
+          {uploadedImages
+            .filter(img => img.parent === "left")
+            .map(img => (
+              <ImageFile
+                key={img.id}
+                src={img.url}
+                // 이미지 삭제 시 해당 이미지 상태에서 제거
+                onDelete={() => {
+                  setUploadedImages(prev =>
+                    prev.filter(i => i.id !== img.id)
+                  );
+                }}
+              />
+            ))}
         </div>
 
         <div className="box right-box" style={{ position: "relative" }}>
@@ -278,6 +328,7 @@ const WriteDiary = () => {
             // 오른쪽 페이지 그리기 캔버스 표시
             <ReactSketchCanvas
               ref={rightCanvasRef}
+              canvasColor="transparent"
               style={{
                 position: "absolute",
                 top: 0, left: 0, right: 0, bottom: 0,
@@ -314,6 +365,15 @@ const WriteDiary = () => {
                 alt={`툴${index}`}
                 className="tool-icon"
                 onClick={handleDrawIconClick}
+                style={{ cursor: "pointer" }}
+              />
+            ) : index === 2 ? (
+              <img
+                key={index}
+                src={icon}
+                alt={`툴${index}`}
+                className="tool-icon"
+                onClick={handleFileIconClick} // 파일 탐색기 열기
                 style={{ cursor: "pointer" }}
               />
             ) : (

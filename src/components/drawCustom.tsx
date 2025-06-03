@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import "../styles/drawcustom.css";
 import xIcon from "../assets/x_icon.png";
 import eraserIcon from "../assets/eraser.png";
@@ -17,7 +17,7 @@ interface DrawCustomProps {
     onClose: () => void;
 }
 
-const DrawCustom: React.FC<DrawCustomProps> = ({
+const DrawCustom = forwardRef<HTMLDivElement, DrawCustomProps>(({
     selectedColor,
     setSelectedColor,
     lineWidth,
@@ -25,9 +25,9 @@ const DrawCustom: React.FC<DrawCustomProps> = ({
     isErasing,
     setIsErasing,
     onClose,
-}) => {
+}, ref) => {
     return (
-        <div className="drawcustom-wrapper">
+        <div className="drawcustom-wrapper" ref={ref}>
             {/* 닫기 버튼 (툴바 닫기 처리) */}
             <a onClick={onClose}>
                 <img src={xIcon} alt="닫기 아이콘" className="close-icon" />
@@ -76,6 +76,6 @@ const DrawCustom: React.FC<DrawCustomProps> = ({
             </div>
         </div>
     );
-};
+});
 
 export default DrawCustom;
