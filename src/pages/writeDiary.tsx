@@ -7,7 +7,6 @@ import ColorPicker from "../components/textCustom";
 import DrawCustom from '../components/drawCustom';
 import image1 from "../assets/next_page.png";
 import image2 from "../assets/complete.png";
-import image3 from "../assets/pencil.png";
 import icon1 from "../assets/text.png";
 import icon2 from "../assets/draw.png";
 import icon3 from "../assets/file.png";
@@ -221,6 +220,7 @@ const WriteDiary = () => {
                 top: 0, left: 0, right: 0, bottom: 0,
                 zIndex: 5,
                 background: "transparent",
+                pointerEvents: drawToolbarVisible ? "auto" : "none",
               }}
               strokeWidth={lineWidth} // 현재 선 두께 적용
               strokeColor={isErasing ? "#FFFFFF" : selectedColor}  // 지우개 모드면 배경색으로 선 색 변경
@@ -283,6 +283,7 @@ const WriteDiary = () => {
                 top: 0, left: 0, right: 0, bottom: 0,
                 zIndex: 5,
                 background: "transparent",
+                pointerEvents: drawToolbarVisible ? "auto" : "none",
               }}
               strokeWidth={lineWidth}
               strokeColor={isErasing ? "#FFFFFF" : selectedColor}
