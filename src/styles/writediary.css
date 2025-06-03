@@ -37,7 +37,7 @@
   font-size: 16px;
   font-weight: 500;
   color: #767676;
-  z-index: 10;
+  z-index: 9999;
 }
 
 .box {
@@ -45,7 +45,6 @@
   height: 583.31px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 2;
 }
 
 .right-box {
@@ -59,7 +58,6 @@
   width: 50px;
   height: 50px;
   object-fit: contain;
-  z-index: 10; 
 }
 
 .toolbar {
@@ -113,14 +111,4 @@
   padding: 8px;
   font-size: 16px;
   resize: none;
-}
-
-.react-sketch-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; 
-  height: 100%;
-  z-index: 1;
-  background: transparent;
 }
