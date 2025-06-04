@@ -6,7 +6,7 @@ import TextBox from "../components/textBox";
 import ColorPicker from "../components/textCustom";
 import DrawCustom from '../components/drawCustom';
 import ImageFile from '../components/imageFile';
-import image1 from "../assets/next_page.png";
+import StickerToolbar from '../components/sticker';
 import image2 from "../assets/complete.png";
 import icon1 from "../assets/text.png";
 import icon2 from "../assets/draw.png";
@@ -19,6 +19,11 @@ interface TextBoxData {
   parent: "left" | "right";
   color: string;
   fontSize: number;
+}
+
+interface StickerItem {
+  id: number;
+  src: string;
 }
 
 const WriteDiary = () => {
@@ -69,9 +74,37 @@ const WriteDiary = () => {
   // 파일 입력 ref 추가
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // StickerToolbar 컴포넌트에 붙일 ref 생성 (DOM 접근용)
+  const stickerToolbarRef = useRef<HTMLDivElement>(null);
+
+  // 스티커 툴바 보임 여부 상태
+  const [showStickerToolbar, setShowStickerToolbar] = useState(false);
+
+  // 추가된 스티커 목록 상태 (id와 src로 구성된 배열)
+  const [addedStickers, setAddedStickers] = useState<StickerItem[]>([]);
+
+  // 스티커 추가 함수: 선택한 스티커 이미지 src를 받아 새로운 스티커 객체 생성 후 상태에 추가
+  const handleAddSticker = (src: string) => {
+    const newSticker = {
+      id: Date.now(), // 고유 id로 현재 시간 사용
+      src,            // 스티커 이미지 src
+    };
+    setAddedStickers((prev) => [...prev, newSticker]); // 기존 배열에 새 스티커 추가
+  };
+
+  // 삭제할 스티커 id를 받아 상태에서 해당 스티커 제거
+  const handleDeleteSticker = (id: number) => {
+    setAddedStickers((prev) => prev.filter((item) => item.id !== id)); // id가 다르면 유지
+  };
+
   // icon3 클릭 시 파일 탐색기 열기 함수
   const handleFileIconClick = () => {
     fileInputRef.current?.click();
+  };
+
+  // icon4 클릭 시 스티커툴바 열기 함수
+  const handleIcon4Click = () => {
+    setShowStickerToolbar(prev => !prev); // 토글 방식으로 열고 닫기 가능
   };
 
   // 업로드된 이미지 목록 상태 관리 (id, 이미지 URL, 부모 영역 구분)
@@ -116,7 +149,8 @@ const WriteDiary = () => {
       if (
         drawToolbarRef.current?.contains(target) ||
         selectedBox?.element?.contains(target) ||
-        colorPickerRef.current?.contains(target)
+        colorPickerRef.current?.contains(target) ||
+        stickerToolbarRef.current?.contains(target)
       ) {
         return;
       }
@@ -134,6 +168,7 @@ const WriteDiary = () => {
       setSelectedTextBoxId(null);
       setColorPickerVisible(false);
       setDrawToolbarVisible(false);
+      setShowStickerToolbar(false);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -300,10 +335,28 @@ const WriteDiary = () => {
                 }}
               />
             ))}
+          {showStickerToolbar && (
+            <StickerToolbar
+              ref={stickerToolbarRef}
+              onClose={() => setShowStickerToolbar(false)}
+              onAddSticker={handleAddSticker} // 스티커 선택 시 추가 함수 호출
+            />
+          )}
+          {/* 붙여놓은 스티커들 */}
+          {addedStickers.map((sticker) => (
+            <ImageFile
+              key={sticker.id}
+              src={sticker.src}
+              initialLeft={100 + Math.random() * 200}
+              initialTop={100 + Math.random() * 200}
+              initialWidth={100}
+              initialHeight={100}
+              onDelete={() => handleDeleteSticker(sticker.id)}
+            />
+          ))}
         </div>
 
         <div className="box right-box" style={{ position: "relative" }}>
-          <img src={image1} alt="다음 페이지" className="next-page-image" />
           {/* 오른쪽 페이지 텍스트 박스 렌더링 */}
           {textBoxes
             .filter(box => box.parent === "right")
@@ -374,6 +427,15 @@ const WriteDiary = () => {
                 alt={`툴${index}`}
                 className="tool-icon"
                 onClick={handleFileIconClick} // 파일 탐색기 열기
+                style={{ cursor: "pointer" }}
+              />
+            ) : index === 3 ? (
+              <img
+                key={index}
+                src={icon}
+                alt={`툴${index}`}
+                className="tool-icon"
+                onClick={handleIcon4Click}
                 style={{ cursor: "pointer" }}
               />
             ) : (

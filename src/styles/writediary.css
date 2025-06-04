@@ -51,15 +51,6 @@
   position: relative;
 }
 
-.next-page-image {
-  position: absolute;
-  top: 266px;
-  right: 16px;
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-}
-
 .toolbar {
   position: fixed;
   top: 291px;
