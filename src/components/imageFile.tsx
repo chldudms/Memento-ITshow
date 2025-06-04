@@ -145,7 +145,7 @@ const ImageFile: React.FC<ImageFileProps> = ({
                 height: size.height,
                 touchAction: "none", // 터치 스크롤 막기
                 border: isFocused ? "2px dashed #999" : "none", // 포커스 시 테두리 표시
-                backgroundColor: "white",
+                backgroundColor: "transparent",
                 userSelect: "none", // 텍스트 선택 방지
                 cursor: "grab", // 마우스 커서 표시
                 zIndex: 1000,
