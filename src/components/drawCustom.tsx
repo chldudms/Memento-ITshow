@@ -28,18 +28,15 @@ const DrawCustom = forwardRef<HTMLDivElement, DrawCustomProps>(({
 }, ref) => {
     return (
         <div className="drawcustom-wrapper" ref={ref}>
-            {/* 닫기 버튼 (툴바 닫기 처리) */}
             <a onClick={onClose}>
                 <img src={xIcon} alt="닫기 아이콘" className="close-icon" />
             </a>
 
-            {/* 지우개/펜 모드 토글 버튼 */}
             <button
                 className="drawcustom-toggle-erase-btn"
                 onClick={() => setIsErasing(!isErasing)}
                 aria-label={isErasing ? "그리기 모드로 전환" : "지우개 모드로 전환"}
             >
-                {/* 현재 모드에 따른 아이콘 표시 */}
                 <img
                     src={isErasing ? penIcon : eraserIcon}
                     alt={isErasing ? "펜 아이콘" : "지우개 아이콘"}
@@ -47,7 +44,6 @@ const DrawCustom = forwardRef<HTMLDivElement, DrawCustomProps>(({
                 />
             </button>
 
-            {/* 선 두께 조절 슬라이더 */}
             <div className="drawcustom-linewidth-control">
                 <input
                     id="lineWidthRange"
@@ -59,7 +55,6 @@ const DrawCustom = forwardRef<HTMLDivElement, DrawCustomProps>(({
                 />
             </div>
 
-            {/* 색상 선택 버튼들 */}
             <div className="drawcustom-colors">
                 {colors.map((c) => (
                     <button
@@ -67,8 +62,8 @@ const DrawCustom = forwardRef<HTMLDivElement, DrawCustomProps>(({
                         className={`drawcustom-color-btn ${c === selectedColor ? "drawcustom-selected" : ""}`}
                         style={{ backgroundColor: c }}
                         onClick={() => {
-                            setIsErasing(false); // 색상 선택 시 지우개 모드 해제
-                            setSelectedColor(c);  // 선택된 색상 변경
+                            setIsErasing(false);
+                            setSelectedColor(c);
                         }}
                         aria-label={`선 색상 ${c}`}
                     />

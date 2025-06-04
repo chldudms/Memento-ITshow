@@ -19,19 +19,15 @@ export interface TextBoxRef {
 
 const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
   ({ id, onDelete, textColor = "#000000", onSelect, fontSize, isSelected }, ref) => {
-    // 위치, 크기, 내용 상태 관리
     const [pos, setPos] = useState({ x: 50, y: 50 });
-    const [size, setSize] = useState({ width: 200, height: 0 });
+    const [size, setSize] = useState({ width: 200, height: 100 }); // 초기 높이 100으로 수정
     const [text, setText] = useState("");
 
-    // 외부 참조용 ref 및 내부 위치/크기 ref
     const posRef = useRef(pos);
     const sizeRef = useRef(size);
-    const boxRef = useRef<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const divRef = useRef<HTMLDivElement>(null);
 
-    // 부모 컴포넌트에서 접근할 수 있도록 외부 ref에 div 노출
     useImperativeHandle(ref, () => ({
       element: divRef.current,
       getText: () => text,
@@ -45,69 +41,81 @@ const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
       sizeRef.current = size;
     }, [size]);
 
-    // 글 내용 변경 시 height 자동 조절
-    useEffect(() => {
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
-        const newHeight = textareaRef.current.scrollHeight;
-
-        // 리사이즈된 높이보다 작으면 리사이즈 높이 유지
-        const heightToSet = Math.max(newHeight, sizeRef.current.height);
-
-        textareaRef.current.style.height = `${heightToSet}px`;
-
-        setSize((prev) => {
-          if (prev.height !== heightToSet) {
-            return { ...prev, height: heightToSet };
-          }
-          return prev;
-        });
-      }
-    }, [text, fontSize]);
-
-    // 텍스트 변경 핸들러
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setText(e.target.value);
-      const el = e.target;
-      el.style.height = "auto";
-      const newHeight = el.scrollHeight;
-      el.style.height = `${newHeight}px`;
-      setSize(prev => ({ ...prev, height: newHeight }));
+    // 드래그 시 .box 영역 크기 및 위치 참고해서 제한
+    const getBoxRect = () => {
+      const box = document.querySelector(".box");
+      return box?.getBoundingClientRect();
     };
 
-    // 드래그 제스처로 위치 변경
+    // 글 내용 변경 시 textarea 높이 자동 조절 + box 영역 벗어나지 않도록 제한
+    useEffect(() => {
+      if (!textareaRef.current) return;
+      const textarea = textareaRef.current;
+      textarea.style.height = "auto"; // 먼저 자동 높이 계산
+      const scrollHeight = textarea.scrollHeight;
+
+      const boxRect = getBoxRect();
+      if (!boxRect || !divRef.current) return;
+
+      // 현재 박스 위치 (부모 .box 내부 좌표)
+      const boxX = posRef.current.x;
+      const boxY = posRef.current.y;
+
+      // textarea 최대 높이 = 부모 박스 높이 - 현재 박스 Y 위치 (남은 공간)
+      const maxHeight = boxRect.height - boxY;
+
+      // 높이를 제한, 글 내용에 맞춰 최대값까지 늘어남
+      const newHeight = Math.min(scrollHeight, maxHeight);
+
+      textarea.style.height = `${newHeight}px`;
+      setSize(prev => ({ ...prev, height: newHeight }));
+    }, [text, fontSize]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setText(e.target.value);
+      // 크기도 변경 시 갱신됨
+    };
+
+    const PADDING = 16 * 2; // 좌우 padding 총합
+    const PADDING_VERTICAL = 16 * 2; // 상하 padding 총합
+    
     const bindDrag = useGesture({
       onDrag: ({ movement: [mx, my], memo }) => {
         if (!memo) memo = { x: posRef.current.x, y: posRef.current.y };
+        
         let newX = memo.x + mx;
         let newY = memo.y + my;
-
-        // 드래그 제한 (다이어리 범위)
-        const maxX = 530.15 * 2 - sizeRef.current.width;
-        const maxY = 583.31 - sizeRef.current.height;
+    
+        // 드래그 제한 (다이어리 영역 + padding 반영)
+        const maxX = 1060.3 - (sizeRef.current.width + PADDING);
+        const maxY = 583.31 - (sizeRef.current.height + PADDING_VERTICAL);
+        
         newX = Math.max(0, Math.min(newX, maxX));
         newY = Math.max(0, Math.min(newY, maxY));
-
+    
         setPos({ x: newX, y: newY });
         posRef.current = { x: newX, y: newY };
         return memo;
       },
     });
-
-    // 크기 조절 제스처
+    
     const bindResize = useGesture({
       onDrag: ({ movement: [mx, my], memo }) => {
         if (!memo) memo = { width: sizeRef.current.width, height: sizeRef.current.height };
-        const maxWidth = 513 * 2;
-        const maxHeight = 544;
-        let newWidth = Math.max(100, Math.min(memo.width + mx, maxWidth));
-        let newHeight = Math.max(60, Math.min(memo.height + my, maxHeight));
+    
+        // padding을 제외한 최대 크기 제한
+        const maxWidth = 700 - PADDING;
+        const maxHeight = 400 - PADDING_VERTICAL;
+    
+        // 최소 크기 제한에도 padding을 반영
+        let newWidth = Math.max(100 - PADDING, Math.min(memo.width + mx, maxWidth));
+        let newHeight = Math.max(60 - PADDING_VERTICAL, Math.min(memo.height + my, maxHeight));
+    
         setSize({ width: newWidth, height: newHeight });
         return memo;
       },
     });
-
-    // delete 키 누를 시 텍스트박스 삭제
+    
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Delete" && isSelected) {
         e.preventDefault();
@@ -123,12 +131,13 @@ const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
           onSelect(id);
         }}
         style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
           transform: `translate(${pos.x}px, ${pos.y}px)`,
           width: size.width,
-          position: "absolute",
         }}
       >
-        {/* 드래그 핸들 */}
         <img
           {...bindDrag()}
           src={dragIcon}
@@ -136,21 +145,20 @@ const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
           className="drag-handle"
           draggable={false}
         />
-        {/* 텍스트 입력 영역 */}
         <textarea
           ref={textareaRef}
           className="text-box-textarea"
-          style={{ height: size.height, fontSize, color: textColor }}
+          style={{ height: size.height, fontSize, color: textColor, overflow: "hidden" }}
           placeholder="텍스트를 입력하세요"
           onKeyDown={handleKeyDown}
           onChange={handleChange}
           value={text}
           spellCheck={false}
         />
-        {/* 크기 조절 핸들 */}
         <div {...bindResize()} className="resize-handle" />
       </div>
     );
-  });
+  }
+);
 
 export default TextBox;

@@ -35,18 +35,16 @@ const ImageFile: React.FC<ImageFileProps> = ({
     // 이미지 선택/포커스 상태
     const [isFocused, setIsFocused] = useState(false);
 
-    // 컴포넌트 마운트 시, 두 박스(left-box, right-box)의 크기를 계산해 bounds 설정
+    // 컴포넌트 마운트 시, main-box의 크기를 계산해 bounds 설정
     useEffect(() => {
-        const leftBox = document.querySelector(".left-box");
-        const rightBox = document.querySelector(".right-box");
+        const mainBox = document.querySelector(".main-box");
 
-        if (leftBox && rightBox) {
-            const leftRect = leftBox.getBoundingClientRect();
-            const rightRect = rightBox.getBoundingClientRect();
+        if (mainBox ) {
+            const mainRect = mainBox.getBoundingClientRect();
 
-            // 두 박스의 시작(left)부터 끝(right)까지 합친 너비와 최대 높이 계산
-            const combinedWidth = rightRect.right - leftRect.left;
-            const combinedHeight = Math.max(leftRect.height, rightRect.height);
+            // 메인 박스의 시작(left)부터 끝(right)까지 합친 너비와 최대 높이 계산
+            const combinedWidth = 1060.30;
+            const combinedHeight = Math.max(mainRect.height);
 
             setBounds({ width: combinedWidth, height: combinedHeight });
         }
@@ -148,7 +146,7 @@ const ImageFile: React.FC<ImageFileProps> = ({
                 backgroundColor: "transparent",
                 userSelect: "none", // 텍스트 선택 방지
                 cursor: "grab", // 마우스 커서 표시
-                zIndex: 1000,
+                zIndex: 20,
             }}
             onClick={() => setIsFocused(true)} // 클릭 시 포커스 활성화
         >
@@ -177,7 +175,7 @@ const ImageFile: React.FC<ImageFileProps> = ({
                             height: "100%",
                             pointerEvents: "none", // 이미지 자체는 이벤트 무시
                             display: "block",
-                            zIndex: 10,
+                            zIndex: 20,
                         }}
                         draggable={false} // 드래그 방지
                     />
