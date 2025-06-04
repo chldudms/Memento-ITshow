@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
+import html2canvas from "html2canvas";
 import "../styles/writediary.css";
 import Header from "../components/header";
 import TextBox from "../components/textBox";
@@ -158,7 +159,7 @@ const WriteDiary = () => {
   const handleDrawIconClick = () => {
     setIsDrawing(true);
     setDrawToolbarVisible(true);
-    setEraseMode(false);  
+    setEraseMode(false);
 
     setSelectedTextBoxId(null);  // 텍스트 박스 선택 해제
     setColorPickerVisible(false); // 색상 선택기 숨기기
@@ -253,6 +254,28 @@ const WriteDiary = () => {
   const handleSelectTextBox = (id: number) => {
     setSelectedTextBoxId(id);
     setColorPickerVisible(true);
+  };
+
+  // 캡처 & 저장 함수
+  const handleCaptureMainBox = async () => {
+    const mainBox = document.querySelector(".main-box") as HTMLElement | null;
+    if (!mainBox) return;
+
+    try {
+      const canvas = await html2canvas(mainBox, { backgroundColor: null });
+      // backgroundColor: null 설정하면 투명 배경 유지 가능
+
+      // 이미지 데이터 URL 생성 (PNG 포맷)
+      const image = canvas.toDataURL("image/png");
+
+      // 이미지 다운로드
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "diary_capture.png";
+      link.click();
+    } catch (error) {
+      console.error("캡처 오류:", error);
+    }
   };
 
   return (
@@ -462,7 +485,12 @@ const WriteDiary = () => {
       </div>
 
       {/* 완료 버튼 이미지 */}
-      <img src={image2} alt="완료" className="complete-image" />
+      <img src={image2}
+        alt="완료"
+        className="complete-image"
+        style={{ cursor: "pointer", width: 40, height: 40, position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}
+        onClick={handleCaptureMainBox}
+      />
     </div>
   );
 };
