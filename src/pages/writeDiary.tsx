@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ReactSketchCanvas, ReactSketchCanvasRef } from "react-sketch-canvas";
 import html2canvas from "html2canvas";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "../styles/writediary.css";
 import Header from "../components/header";
 import TextBox from "../components/textBox";
@@ -29,6 +31,13 @@ interface StickerItem {
 }
 
 const WriteDiary = () => {
+  const navigate = useNavigate();
+
+  const handleClick = async () => {
+    await handleCaptureMainBox();  // 캡처 후 서버 저장 완료 대기
+    navigate("/downloadDiary");   // downloadDiary 경로로 이동
+  };
+
   // 모든 텍스트 박스 정보 저장
   const [textBoxes, setTextBoxes] = useState<TextBoxData[]>([]);
 
@@ -92,6 +101,36 @@ const WriteDiary = () => {
   // 좌우 캔버스 지우개 모드를 독립적으로 관리
   const [eraseMode, setEraseMode] = useState(false);
 
+  // 다이어리 이름
+  const [title, setTitle] = useState('');
+
+  // 다이어리 생성 날짜
+  const [date, setDate] = useState('');
+  
+  useEffect(() => {
+    async function fetchDiary() {
+      try {
+        // 서버에서 가장 최근 작성된 다이어리 정보(title, created_at)를 가져옴
+        const res = await axios.get('http://localhost:5001/latest-diary');
+        setTitle(res.data.title);
+  
+        // 날짜를 'YYYY-MM-DD' 형식의 문자열로 변환
+        const dateStr = new Date(res.data.created_at).toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        }).replace(/\.\s/g, '-').replace(/\.$/, '');
+  
+        setDate(dateStr);
+      } catch (error) {
+        console.error('다이어리 정보 조회 실패:', error);
+      }
+    }
+  
+    // 컴포넌트 마운트 시 다이어리 정보 불러오기
+    fetchDiary();
+  }, []);
+  
   // 지우개 모드가 변경될 때마다 해당 캔버스에만 적용
   useEffect(() => {
     if (CanvasRef.current) {
@@ -262,17 +301,27 @@ const WriteDiary = () => {
     if (!mainBox) return;
 
     try {
+      // html2canvas로 .main-box 영역을 캡처해서 캔버스 생성
       const canvas = await html2canvas(mainBox, { backgroundColor: null });
-      // backgroundColor: null 설정하면 투명 배경 유지 가능
+      // 캔버스를 PNG 데이터 URL(base64)로 변환
+      const imageDataUrl = canvas.toDataURL("image/png");
 
-      // 이미지 데이터 URL 생성 (PNG 포맷)
-      const image = canvas.toDataURL("image/png");
+      // 서버에 이미지 데이터(base64) 전송
+      const response = await axios.post("http://localhost:5001/upload-image", {
+        image: imageDataUrl,
+      });
 
-      // 이미지 다운로드
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = "diary_capture.png";
-      link.click();
+      // 서버가 저장한 이미지 다운로드용 URL 획득
+      const { imageUrl } = response.data;
+
+      console.log("저장된 이미지 URL:", imageUrl);
+
+      // 다운로드 링크 생성 및 클릭 이벤트 발생시켜 이미지 바로 다운로드
+      // const link = document.createElement("a");
+      // link.href = imageUrl;
+      // link.download = "diary_capture.png";
+      // link.click();
+
     } catch (error) {
       console.error("캡처 오류:", error);
     }
@@ -281,7 +330,7 @@ const WriteDiary = () => {
   return (
     <div className="write-container">
       <Header />
-      <div className="diary-title">오늘의 다이어리</div>
+      <div className="diary-title">{title}</div>
 
       {/* 커스텀(텍스트) 표시 */}
       {colorPickerVisible && selectedTextBoxId !== null && (
@@ -313,7 +362,7 @@ const WriteDiary = () => {
       {/* 다이어리 본문 좌우 페이지 */}
       <div className="background-box" style={{ position: "relative" }} ref={backgroundBoxesRef}>
         <div className="box main-box" style={{ position: "relative", backgroundColor: backgroundColor }}>
-          <div className="date-text">2025-05-20</div>
+        <div className="date-text">{date}</div>
           {/* 왼쪽 페이지 텍스트 박스 렌더링 */}
           {textBoxes
             .filter(box => box.parent === "main")
@@ -489,7 +538,7 @@ const WriteDiary = () => {
         alt="완료"
         className="complete-image"
         style={{ cursor: "pointer", width: 40, height: 40, position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}
-        onClick={handleCaptureMainBox}
+        onClick={handleClick}
       />
     </div>
   );
