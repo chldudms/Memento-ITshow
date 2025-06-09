@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/creatediary.css'
 import Header from '../components/header';
-
+import axios from "axios";
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const CreateDiary = () => {
-    const [diaryTitle, setTitle] = useState('');
+    const navigator = useNavigate()
+    const [diaryTitle, setTitle] = useState("");
     const [coverColor, setColor] = useState('#AFAFAF')
     const [strapColor, setStrap] = useState('#5e5e5e')
     const [hashtag, setHash] = useState('')
@@ -14,7 +16,7 @@ const CreateDiary = () => {
 
     const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
     const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
-    const hashs = ["#일상기록", "#추억", "#감정일기", "#특별한일"]
+    const hashs = ["#아이티쇼", "#일상기록", "#감정일기", "#특별한일"]
     const stickers = ["smile", "cry", "sad", "lovely", "thinking", "star"];
 
     function chgCoverColor(color: string) {
@@ -28,6 +30,32 @@ const CreateDiary = () => {
         setSticker('block')
         setShape(sticker)
     }
+
+    const addDiary = async () => {
+        if (diaryTitle.trim() === "") {
+            alert("다이어리 제목을 입력해주세요!");
+            return;
+        }
+
+        try {
+            const response = await axios.post("http://localhost:5001/addDiary", {
+                title: diaryTitle,
+                color: coverColor,
+                hashtags: hashtag,
+                sticker: showSticker,
+                password: diaryKey,
+            });
+
+            console.log("서버 응답:", response.data);
+            alert("다이어리 저장 완료");
+            navigator("/home");
+        } catch (err) {
+            console.error("에러 발생", err);
+            alert("저장 실패");
+        }
+    };
+
+    
 
     return (
         <div className='diary'>
@@ -98,7 +126,7 @@ const CreateDiary = () => {
                 <div className='label' />
             </div>
 
-            <button className='diaryCreateBtn' type='submit'>완료</button>
+            <button className='diaryCreateBtn' type='submit' onClick={()=>addDiary()}>완료</button>
         </div>
     );
 };
