@@ -3,31 +3,37 @@ import '../styles/creatediary.css'
 import Header from '../components/header';
 import axios from "axios";
 import { Navigate, useNavigate } from 'react-router-dom';
+import { colorList } from '../constants/colorList';
 
 const CreateDiary = () => {
     const navigator = useNavigate()
     const [diaryTitle, setTitle] = useState("");
     const [coverColor, setColor] = useState('#AFAFAF')
     const [strapColor, setStrap] = useState('#5e5e5e')
+    const [selectedColorId, setSelectedColorId] = useState("gray");
     const [hashtag, setHash] = useState('')
-    const [showSticker, setSticker] = useState('none')
+    const [showSticker, setStatus] = useState('none')
     const [stickerShape, setShape] = useState('smile')
     const [diaryKey, setKey] = useState('')
+    
 
-    const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
-    const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
+    // const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
+    // const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
     const hashs = ["#아이티쇼", "#일상기록", "#감정일기", "#특별한일"]
     const stickers = ["smile", "cry", "sad", "lovely", "thinking", "star"];
 
-    function chgCoverColor(color: string) {
-        setColor(color)
-        var i = colors.indexOf(color)
-        console.log(color)
-        setStrap(strapColors[i]);
+    function chgCoverColor(colorId: string) {
+        setSelectedColorId(colorId);
+        const selected = colorList.find((c) => c.id === colorId);
+        if (selected) {
+            setColor(selected.color);         // 커버 배경
+            setStrap(selected.strapColor);    // 스트랩 배경
+        }
     }
 
+
     function putSticker(sticker: string) {
-        setSticker('block')
+        setStatus('block')
         setShape(sticker)
     }
 
@@ -40,9 +46,9 @@ const CreateDiary = () => {
         try {
             const response = await axios.post("http://localhost:5001/addDiary", {
                 title: diaryTitle,
-                color: coverColor,
+                color: selectedColorId,  
                 hashtags: hashtag,
-                sticker: showSticker,
+                sticker: stickerShape,
                 password: diaryKey,
             });
 
@@ -54,8 +60,6 @@ const CreateDiary = () => {
             alert("저장 실패");
         }
     };
-
-    
 
     return (
         <div className='diary'>
@@ -72,15 +76,16 @@ const CreateDiary = () => {
 
                 <p>커버 색상</p>
                 <div className="colorGrid">
-                    {colors.map((color, i) => (
+                    {colorList.map(({ id, color }) => (
                         <button
-                            key={i}
+                            key={id}
                             className="colorBtn"
                             style={{ backgroundColor: color }}
-                            onClick={() => chgCoverColor(color)}
+                            onClick={() => chgCoverColor(id)}
                         />
                     ))}
                 </div>
+
 
                 <p>해시 태그</p>
                 <div className='hashtags'>
