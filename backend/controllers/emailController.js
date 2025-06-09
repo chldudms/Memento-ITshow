@@ -19,7 +19,7 @@ async function sendEmailWithAttachment(toEmail, imageUrl) {
   // 이메일 내용 및 첨부파일 설정
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_USER,
+    to: toEmail,
     subject: 'Memento 다이어리 이미지 전송',
     text: '첨부된 이미지 파일을 확인해주세요.',
     attachments: [
