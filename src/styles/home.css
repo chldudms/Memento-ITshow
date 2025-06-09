@@ -1,18 +1,20 @@
 body {
     overflow-y: auto;
+    background-color: #fcfcfc;
 }
 
 .diaryAddBtn {
     position: fixed;
-    top: 890px;
-    right: 330px;
+    width: 130px;
+    bottom: 70px;
+    right: 280px;
     z-index: 10;
 }
-
 
 .diaryList {
    position: relative;
     top: 150px;
+    right: 100px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -22,7 +24,7 @@ body {
 }
 
 .diaryList img {
-    width: 300px;
+    width: 330px;
     /* 고정 높이로 비율 유지 */
     border-radius: 8px;
     object-fit: cover;
@@ -42,7 +44,7 @@ body {
     text-align: center;
 }
 
-.diaryTitle {
+.diary-Title {
     margin-top: -20px;
     font-size: 20px;
     /* 타이틀 크게! */
@@ -53,9 +55,9 @@ body {
     max-width: 180px;
 }
 
-.diarySticker {
+.diary-Sticker {
     position: absolute;
-    bottom: 80px;
+    bottom: 100px;
     right: 70px;
     width: 40px !important;
     /* 강제로 사이즈 고정 */
@@ -64,5 +66,4 @@ body {
     object-fit: contain;
     /* 이미지 비율 유지하며 줄이기 */
     pointer-events: none;
-    /* 클릭 방지 (원하는 경우) */
 }

@@ -15,12 +15,14 @@ const CreateDiary = () => {
     const [showSticker, setStatus] = useState('none')
     const [stickerShape, setShape] = useState('')
     const [diaryKey, setKey] = useState('')
-    
+
 
     // const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
     // const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
     const hashs = ["#아이티쇼", "#일상기록", "#감정일기", "#특별한일"]
     const stickers = ["smile", "cry", "sad", "lovely", "thinking", "star"];
+
+  
 
     function chgCoverColor(colorId: string) {
         setSelectedColorId(colorId);
@@ -73,8 +75,7 @@ const CreateDiary = () => {
                     value={diaryTitle}
                     onChange={(e) => setTitle(e.target.value)}
                 />
-
-                <p>커버 색상</p>
+                 <p>커버 색상</p>
                 <div className="colorGrid">
                     {colorList.map(({ id, color }) => (
                         <button
@@ -86,13 +87,18 @@ const CreateDiary = () => {
                     ))}
                 </div>
 
-
                 <p>해시 태그</p>
                 <div className='hashtags'>
                     {hashs.map((hash) => (
-                        <div key={hash} onClick={() => setHash(hash)}>{hash}</div>
+                        <div
+                            key={hash}
+                            className={`hashtag ${hashtag === hash ? 'selected' : ''}`}                            
+                            onClick={() => setHash(hash)}>
+                            {hash}
+                        </div>
                     ))}
                 </div>
+
 
                 <p>스티커</p>
                 <div className='board' />

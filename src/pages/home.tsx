@@ -52,8 +52,8 @@ const Home = () => {
           <div onClick={() => diaryView(v.id)} className="diaryItem" key={i}>
             <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${i + 1}`} />
             {v.sticker && (
-              <img src={`img/${v.sticker}.png`} className="diarySticker" />
-            )}            <p className="diaryTitle">{v.title}</p>
+              <img src={`img/${v.sticker}.png`} className="diary-Sticker" />
+            )}            <p className="diary-Title">{v.title}</p>
           </div>
         ))}
       </div>
