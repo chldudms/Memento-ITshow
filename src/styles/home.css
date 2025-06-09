@@ -1,5 +1,67 @@
+body {
+    overflow-y: auto;
+}
+
 .diaryAddBtn {
-    position: absolute;
+    position: fixed;
     top: 890px;
     right: 330px;
+}
+
+
+.diaryList {
+   position: relative;
+    top: 200px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    /* 좀 더 여백 줌 */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.diaryList img {
+    width: 250px;
+    /* 고정 높이로 비율 유지 */
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.diaryList img:hover {
+    transform: scale(1.03);
+}
+
+.diaryItem {
+    position: relative;
+    /* 기준 잡기 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.diaryTitle {
+    margin-top: -20px;
+    font-size: 20px;
+    /* 타이틀 크게! */
+    color: #2e2e2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.diarySticker {
+    position: absolute;
+    bottom: 80px;
+    right: 70px;
+    width: 40px !important;
+    /* 강제로 사이즈 고정 */
+    height: 40px !important;
+    z-index: 2;
+    object-fit: contain;
+    /* 이미지 비율 유지하며 줄이기 */
+    pointer-events: none;
+    /* 클릭 방지 (원하는 경우) */
 }

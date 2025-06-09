@@ -13,7 +13,7 @@ const CreateDiary = () => {
     const [selectedColorId, setSelectedColorId] = useState("gray");
     const [hashtag, setHash] = useState('')
     const [showSticker, setStatus] = useState('none')
-    const [stickerShape, setShape] = useState('smile')
+    const [stickerShape, setShape] = useState('')
     const [diaryKey, setKey] = useState('')
     
 
