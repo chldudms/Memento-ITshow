@@ -6,12 +6,13 @@ body {
     position: fixed;
     top: 890px;
     right: 330px;
+    z-index: 10;
 }
 
 
 .diaryList {
    position: relative;
-    top: 200px;
+    top: 150px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -21,7 +22,7 @@ body {
 }
 
 .diaryList img {
-    width: 250px;
+    width: 300px;
     /* 고정 높이로 비율 유지 */
     border-radius: 8px;
     object-fit: cover;

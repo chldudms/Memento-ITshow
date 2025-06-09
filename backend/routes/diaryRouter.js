@@ -33,8 +33,25 @@ router.get('/loadDiarys', async (req, res) => {
     }
 });
 
-// router.get('/loadDiarys', );
+
 // // 다이어리 내용 조회
-// router.get('/loadDiary/:diaryId', );
+router.get('/diary/:id/images', async (req, res) => {
+  const diaryId = req.params.id;
+
+  const query = `
+    SELECT image_path
+    FROM diary_custom
+    WHERE diary_id = ?
+  `;
+
+  try {
+    const [rows] = await db.execute(query, [diaryId]);
+    res.json(rows);
+  } catch (error) {
+    console.error('이미지 조회 실패', error);
+    res.status(500).send('서버 에러');
+  }
+});
+
 
 module.exports = router;

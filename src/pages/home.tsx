@@ -17,6 +17,12 @@ const Home = () => {
   const navigate = useNavigate();
   const [diaries, setDiaries] = useState<Diary[]>([]);
 
+  function diaryView(diaryId: number) {
+    localStorage.setItem('diaryId', diaryId.toString());
+    navigate("/DiaryView");
+  }
+
+
   useEffect(() => {
     const fetchDiaries = async () => {
       try {
@@ -43,7 +49,7 @@ const Home = () => {
 
       <div className="diaryList">
         {diaries.map((v, i) => (
-          <div className="diaryItem" key={i}>
+          <div onClick={() => diaryView(v.id)} className="diaryItem" key={i}>
             <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${i + 1}`} />
             {v.sticker && (
               <img src={`img/${v.sticker}.png`} className="diarySticker" />

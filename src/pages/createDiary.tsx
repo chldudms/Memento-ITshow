@@ -54,7 +54,7 @@ const CreateDiary = () => {
 
             console.log("서버 응답:", response.data);
             alert("다이어리 저장 완료");
-            navigator("/home");
+            navigator("/writeDiary");
         } catch (err) {
             console.error("에러 발생", err);
             alert("저장 실패");
