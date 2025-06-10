@@ -20,7 +20,7 @@
 }
 
 .overlay {
-  position: absolute;  /* 이미지 위로 띄움 */
+  position: absolute; /* 이미지 위로 띄움 */
   display: flex;
   flex-direction: column;
   align-items: center;

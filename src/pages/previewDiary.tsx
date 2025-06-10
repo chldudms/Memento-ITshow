@@ -42,6 +42,7 @@ const PreviewDiary = () => {
         }
     };
 
+    // alter 커스텀
     const handleLeaveClick = async () => {
         const result = await Swal.fire({
             title: '작성 중인 내용이 초기화됩니다.',
