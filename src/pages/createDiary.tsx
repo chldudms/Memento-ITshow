@@ -56,6 +56,9 @@ const CreateDiary = () => {
             return;
         }
 
+        const diaryData = {"title":diaryTitle,"color":selectedColorId,"sticker":stickerShape}
+        localStorage.setItem("diaryData", JSON.stringify(diaryData) )
+
         try {
             const response = await axios.post("http://localhost:5001/addDiary", {
                 title: diaryTitle,

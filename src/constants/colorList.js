@@ -1,6 +1,5 @@
 export const colorList = [
     {
-
         id: "orange",
         color: "#FFC4C4",
         strapColor: "#FF963B",
@@ -21,7 +20,7 @@ export const colorList = [
     {
         id: "green",
         color: "#B7E4C7",
-        strapColor: "#1DB60C",
+        strapColor: "#93D18C",
         img: "img/greenCover.png",
     },
     {
