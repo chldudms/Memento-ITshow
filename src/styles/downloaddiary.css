@@ -68,6 +68,8 @@ d-input::placeholder {
     border: none;
     border-radius: 8px;
     background: #FFC4C4;
-    font-size: 16px;
+    font-size: 17px;
+    font-weight: lighter;
     color: white;
+    letter-spacing: 1px;
 }

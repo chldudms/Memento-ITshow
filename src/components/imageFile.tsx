@@ -9,17 +9,18 @@ interface ImageFileProps {
     initialTop?: number;
     initialWidth?: number;
     initialHeight?: number;
-    onDelete?: () => void; // 삭제 시 호출할 콜백 함수
+    onDelete?: () => void; // 삭제 시 호출할 콜백 함수-
 }
 
-const ImageFile: React.FC<ImageFileProps> = ({
+const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
     src,
     alt,
-    initialLeft = 10,
-    initialTop = 10,
+    initialLeft = 100,
+    initialTop = 100,
     initialWidth = 150,
     initialHeight = 150,
     onDelete,
+    style,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -39,7 +40,7 @@ const ImageFile: React.FC<ImageFileProps> = ({
     useEffect(() => {
         const mainBox = document.querySelector(".main-box");
 
-        if (mainBox ) {
+        if (mainBox) {
             const mainRect = mainBox.getBoundingClientRect();
 
             // 메인 박스의 시작(left)부터 끝(right)까지 합친 너비와 최대 높이 계산
@@ -146,7 +147,7 @@ const ImageFile: React.FC<ImageFileProps> = ({
                 backgroundColor: "transparent",
                 userSelect: "none", // 텍스트 선택 방지
                 cursor: "grab", // 마우스 커서 표시
-                zIndex: 20,
+                zIndex: style?.zIndex ?? 5,
             }}
             onClick={() => setIsFocused(true)} // 클릭 시 포커스 활성화
         >

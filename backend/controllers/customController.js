@@ -28,7 +28,7 @@ async function uploadImage(req, res) {
   }
 
   // 저장된 이미지 URL 생성
-  const imageUrl = `http://localhost:5001/download/${fileName}`;
+  const imageUrl = `http://localhost:5001/uploads/${fileName}`;
 
   try {
     // 최근 다이어리 ID 조회
