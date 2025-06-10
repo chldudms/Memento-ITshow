@@ -82,6 +82,7 @@ const Home = () => {
             {v.sticker && (
               <img src={`img/${v.sticker}.png`} className="diary-Sticker" />
             )}            <p className="diary-Title">{v.title}</p>
+            {v.hashtags && <div className="hashs">{v.hashtags}</div>}  
           </div>
         ))}
       </div>

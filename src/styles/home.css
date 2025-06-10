@@ -13,8 +13,8 @@ body {
 
 .diaryList {
    position: relative;
-    top: 150px;
-    right: 100px;
+    top: 110px;
+    right: 30px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -24,7 +24,7 @@ body {
 }
 
 .diaryList img {
-    width: 330px;
+    width: 300px;
     /* 고정 높이로 비율 유지 */
     border-radius: 8px;
     object-fit: cover;
@@ -57,7 +57,7 @@ body {
 
 .diary-Sticker {
     position: absolute;
-    bottom: 100px;
+    bottom: 160px;
     right: 70px;
     width: 40px !important;
     /* 강제로 사이즈 고정 */
@@ -106,4 +106,18 @@ body {
 
 .submitBtn:hover{
     background-color: #cecece;
+}
+
+.hashs{
+background-color: #fffdf0;
+    border: 2px solid #FFD447;
+    border-radius: 20px;
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+    color: #444;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-bottom: 20px;
 }
