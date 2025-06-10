@@ -10,17 +10,44 @@ interface Diary {
   color: string;
   hashtags: string;
   sticker: string;
+  password: string,
   created_at: string;
 }
 
 const Home = () => {
   const navigate = useNavigate();
   const [diaries, setDiaries] = useState<Diary[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [inputPw, setInputPw] = useState(""); // 유저 입력값
+  const [selectedDiary, setSelectedDiary] = useState<Diary | null>(null); // 클릭된 다이어리 저장
+  const [diaryPw, setPw]= useState("");
 
-  function diaryView(diaryId: number) {
-    localStorage.setItem('diaryId', diaryId.toString());
-    navigate("/DiaryView");
+  function diaryView(diary: Diary) {
+    setPw(diary.password)
+    console.log(inputPw)
+    if (diary.password) {
+      // 비번 있는 다이어리는 모달 오픈
+      setSelectedDiary(diary);
+      setShowModal(true);
+    } else {
+      // 비번 없는 다이어리는 바로 페이지로 이동
+      localStorage.setItem('diaryId', diary.id.toString());
+      navigate("/DiaryView");
+    }
   }
+
+  const passwordCheck = () => {
+    if (selectedDiary && inputPw.toString() === selectedDiary.password) {
+      console.log(inputPw)
+      console.log(selectedDiary.password)
+      localStorage.setItem('diaryId', selectedDiary.id.toString());
+      navigate("/DiaryView");
+      setShowModal(false);
+      setInputPw("");
+    } else {
+      alert("비밀번호가 일치하지 않습니다");
+    }
+  };
 
 
   useEffect(() => {
@@ -37,11 +64,12 @@ const Home = () => {
     fetchDiaries();
   }, []);
 
+
   return (
     <div>
       <Header />
       <img
-        src="/img/addBtn.png"
+        src="/img/addBtn.svg"
         className="diaryAddBtn"
         alt="다이어리 생성 버튼"
         onClick={() => navigate('/createDiary')}
@@ -49,7 +77,7 @@ const Home = () => {
 
       <div className="diaryList">
         {diaries.map((v, i) => (
-          <div onClick={() => diaryView(v.id)} className="diaryItem" key={i}>
+          <div onClick={() => diaryView(v)} className="diaryItem" key={i}>
             <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${i + 1}`} />
             {v.sticker && (
               <img src={`img/${v.sticker}.png`} className="diary-Sticker" />
@@ -58,7 +86,16 @@ const Home = () => {
         ))}
       </div>
 
-
+      {showModal && (
+        <div className="modalOverlay">
+          <div className="pwModal">
+            <p className="pw">다이어리 비밀번호</p>
+            <input placeholder="다이어리 비밀번호를 입력 해주세요"
+              onChange={(e) => setInputPw(e.target.value)} />
+            <button className="submitBtn" onClick={passwordCheck}>확인</button>
+          </div>
+        </div>
+      )}
       
     </div>
   );

@@ -64,6 +64,46 @@ body {
     height: 40px !important;
     z-index: 2;
     object-fit: contain;
-    /* 이미지 비율 유지하며 줄이기 */
     pointer-events: none;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.pw {
+    font-size: 25px;
+    display: flex;
+    margin-left: 5px;
+}
+
+.pwModal {
+    background-color: white;
+    padding: 60px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1000;
+    font-size: 20px;
+}
+
+.submitBtn{
+    margin-left: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 10px 30px; 
+    border: 1px solid #7D7D7D;
+}
+
+.submitBtn:hover{
+    background-color: #cecece;
 }
