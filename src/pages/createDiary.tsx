@@ -116,7 +116,7 @@ const CreateDiary = () => {
                 <p>다이어리 암호 설정 (선택)</p>
                 <div>
                     <input
-                        type='number'
+                        type='text'
                         className='diaryKey'
                         placeholder='다이어리의 암호를 입력해주세요. (최대 4자리)'
                         value={diaryKey}

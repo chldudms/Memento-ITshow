@@ -37,7 +37,7 @@ const Home = () => {
   }
 
   const passwordCheck = () => {
-    if (selectedDiary && inputPw.toString() === selectedDiary.password) {
+    if (selectedDiary && inputPw === selectedDiary.password) {
       console.log(inputPw)
       console.log(selectedDiary.password)
       localStorage.setItem('diaryId', selectedDiary.id.toString());
