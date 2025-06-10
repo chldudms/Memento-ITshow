@@ -63,8 +63,8 @@
     touch-action: auto;
     user-select: text;
     overflow: hidden;
-    white-space: pre-wrap;  
-    word-break: break-word; 
+    white-space: pre-wrap;
+    word-break: break-word;
     overflow-wrap: break-word;
 }
 

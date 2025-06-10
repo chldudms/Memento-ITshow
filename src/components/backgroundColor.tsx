@@ -3,7 +3,7 @@ import "../styles/backgroundcolor.css";
 import xIcon from "../assets/x_icon.png";
 
 // 선택 가능한 색상 목록
-const colors = ["#000000", "#FFFFFF", "#FFB6C1", "#FADADD", "#FFF1E6", "#FFF7B1", "#B7E4C7", "#E3F6F5","#A9D1FF", "#C2C9FF"];
+const colors = ["#000000", "#FFFFFF", "#FFB6C1", "#FADADD", "#FFF1E6", "#FFF7B1", "#B7E4C7", "#E3F6F5", "#A9D1FF", "#C2C9FF"];
 
 interface BackgroundColorToolbarProps {
     backgroundColor: string;

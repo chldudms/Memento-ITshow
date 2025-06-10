@@ -18,9 +18,9 @@
 
 .close-icon {
   position: absolute;
-  top: 8px;          
-  right: 8px;         
-  width: 24px;        
+  top: 8px;
+  right: 8px;
+  width: 24px;
   height: 24px;
   cursor: pointer;
   object-fit: contain;
@@ -37,12 +37,12 @@
 }
 
 .font-button {
-  width: 32px;   
+  width: 32px;
   height: 32px;
   border-radius: 50%;
   background-color: #ffcee6;
   border: none;
-  font-size: 20px; 
+  font-size: 20px;
   font-weight: 700;
   color: #a1004d;
   cursor: pointer;
@@ -63,7 +63,7 @@
 }
 
 .font-size-display {
-  min-width: 30px; 
+  min-width: 30px;
   font-size: 16px;
   font-weight: 600;
   text-align: center;
@@ -91,8 +91,8 @@
   cursor: pointer;
   outline: none;
   padding: 0;
-  background-color: inherit; 
-  box-shadow:  3px 3px 6px rgba(0,0,0,0.1);
+  background-color: inherit;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.15s ease;
 }
 

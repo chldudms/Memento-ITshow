@@ -74,6 +74,19 @@ const Home = () => {
     fetchDiaries();
   }, []);
 
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setShowModal(false);
+    setInputPw("");
+    setSelectedDiary(null);
+  };
+
+  // 외부 클릭 시 모달 닫기
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
 
   return (
     <div>
@@ -103,7 +116,7 @@ const Home = () => {
       </div>
 
       {showModal && (
-        <div className="modalOverlay">
+        <div className="modalOverlay" onClick={handleOverlayClick}>
           <div className="pwModal">
             <p className="pw">다이어리 비밀번호</p>
             <input placeholder="다이어리 비밀번호를 입력 해주세요."

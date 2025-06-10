@@ -78,44 +78,44 @@ const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
 
     const PADDING = 16 * 2; // 좌우 padding 총합
     const PADDING_VERTICAL = 16 * 2; // 상하 padding 총합
-    
+
     const bindDrag = useGesture({
       onDrag: ({ movement: [mx, my], memo }) => {
         if (!memo) memo = { x: posRef.current.x, y: posRef.current.y };
-        
+
         let newX = memo.x + mx;
         let newY = memo.y + my;
-    
+
         // 드래그 제한 (다이어리 영역 + padding 반영)
         const maxX = 1060.3 - (sizeRef.current.width + PADDING);
         const maxY = 583.31 - (sizeRef.current.height + PADDING_VERTICAL);
-        
+
         newX = Math.max(0, Math.min(newX, maxX));
         newY = Math.max(0, Math.min(newY, maxY));
-    
+
         setPos({ x: newX, y: newY });
         posRef.current = { x: newX, y: newY };
         return memo;
       },
     });
-    
+
     const bindResize = useGesture({
       onDrag: ({ movement: [mx, my], memo }) => {
         if (!memo) memo = { width: sizeRef.current.width, height: sizeRef.current.height };
-    
+
         // padding을 제외한 최대 크기 제한
         const maxWidth = 700 - PADDING;
         const maxHeight = 400 - PADDING_VERTICAL;
-    
+
         // 최소 크기 제한에도 padding을 반영
         let newWidth = Math.max(100 - PADDING, Math.min(memo.width + mx, maxWidth));
         let newHeight = Math.max(60 - PADDING_VERTICAL, Math.min(memo.height + my, maxHeight));
-    
+
         setSize({ width: newWidth, height: newHeight });
         return memo;
       },
     });
-    
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Delete" && isSelected) {
         e.preventDefault();

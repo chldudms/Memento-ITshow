@@ -17,13 +17,10 @@ const CreateDiary = () => {
     const [stickerShape, setShape] = useState('')
     const [diaryKey, setKey] = useState('')
 
-
     // const colors = ["#FFC4C4", "#FFCDA2", "#FFED61", "#90FF83", "#A7B0FF", "#D88BFF", "#B7FFEC", "#AFAFAF"];
     // const strapColors = ["#FF9E9E", "#FFB97A", "#FFD500", "#5AFF47", "#7E8CFF", "#B84AFF", "#7FCBB7", "#8B8B8B"];
     const hashs = ["#아이티쇼", "#일상기록", "#감정일기", "#특별한일"]
     const stickers = ["smile", "cry", "sad", "lovely", "thinking", "star"];
-
-
 
     function chgCoverColor(colorId: string) {
         setSelectedColorId(colorId);
@@ -33,7 +30,6 @@ const CreateDiary = () => {
             setStrap(selected.strapColor);    // 스트랩 배경
         }
     }
-
 
     function putSticker(sticker: string) {
         setStatus('block')
@@ -56,8 +52,8 @@ const CreateDiary = () => {
             return;
         }
 
-        const diaryData = {"title":diaryTitle,"color":selectedColorId,"sticker":stickerShape}
-        localStorage.setItem("diaryData", JSON.stringify(diaryData) )
+        const diaryData = { "title": diaryTitle, "color": selectedColorId, "sticker": stickerShape }
+        localStorage.setItem("diaryData", JSON.stringify(diaryData))
 
         try {
             const response = await axios.post("http://localhost:5001/addDiary", {

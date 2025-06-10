@@ -1,5 +1,5 @@
-.diaryPicture{
-    position:fixed;
+.diaryPicture {
+    position: fixed;
     top: 229px;
     left: 17.3%;
     width: 1257.12px;
@@ -7,7 +7,8 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 
 }
-.message{
+
+.message {
     position: fixed;
     top: 500px;
     left: 800px;

@@ -44,7 +44,7 @@
     border-radius: 15px;
 }
 
-.d-input{
+.d-input {
     position: fixed;
     top: 63%;
     left: 38%;
@@ -59,7 +59,7 @@ d-input::placeholder {
     font-size: 24px;
 }
 
-.d-button{
+.d-button {
     position: fixed;
     top: 70%;
     left: 38%;
@@ -74,7 +74,7 @@ d-input::placeholder {
     letter-spacing: 1px;
 }
 
-.diarySticker{
+.diarySticker {
     position: relative;
     width: 40px;
     top: 530px;

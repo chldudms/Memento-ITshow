@@ -18,14 +18,12 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-    /* 좀 더 여백 줌 */
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .diaryList img {
-    width: 300px;
-    /* 고정 높이로 비율 유지 */
+    width: 300px; /* 고정 높이로 비율 유지 */
     border-radius: 8px;
     object-fit: cover;
     transition: transform 0.3s ease;
@@ -36,8 +34,7 @@ body {
 }
 
 .diaryItem {
-    position: relative;
-    /* 기준 잡기 */
+    position: relative; /* 기준 잡기 */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,8 +55,7 @@ body {
     position: absolute;
     top: 270px;
     right: 60px;
-    width: 40px !important;
-    /* 강제로 사이즈 고정 */
+    width: 40px !important; /* 강제로 사이즈 고정 */
     height: 40px !important;
     z-index: 2;
     object-fit: contain;
@@ -96,10 +92,11 @@ body {
 }
 
 .submitBtn {
-    margin-left: 30px;
+    margin-left: 25px;
     background-color: #ffffff;
-    border-radius: 20px;
-    padding: 10px 30px;
+    border-radius: 10px;
+    padding: 12px 30px;
+    font-size: 20px;
     border: 1px solid #7D7D7D;
 }
 

@@ -8,11 +8,9 @@ import { colorList } from "../constants/colorList";
 const DownloadDiary = () => {
   const [email, setEmail] = useState('');
   const [coverColor, setColor] = useState("gray")
-  const [strapColor,setStrap] = useState("")
+  const [strapColor, setStrap] = useState("")
   const [sticker, setSticker] = useState("")
   const [Color, setCover] = useState("gray")
-
-  const [diaryData, setData] = useState("")
   const navigate = useNavigate();
 
   // 이메일 입력값 상태 업데이트
@@ -27,16 +25,16 @@ const DownloadDiary = () => {
       try {
         const parsed = JSON.parse(data);
         if (parsed.color) {
-          setColor(parsed.color); 
+          setColor(parsed.color);
         }
         if (parsed.sticker) {
-          setSticker(parsed.sticker); 
+          setSticker(parsed.sticker);
         }
       } catch (err) {
         console.error("데이터 파싱 오류:", err);
       }
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const selectedColorData = colorList.find(
@@ -47,11 +45,12 @@ const DownloadDiary = () => {
       setCover(selectedColorData.color)
       setStrap(selectedColorData.strapColor);
     } else {
-      setStrap(""); 
-    
+      setStrap("");
+
       console.warn(`${coverColor}`);
     }
-  }, [coverColor, colorList]); 
+  }, [coverColor, colorList]);
+
   const handleDownload = async () => {
     if (!email) {
       await Swal.fire({
@@ -113,7 +112,7 @@ const DownloadDiary = () => {
         <div className='d-cover' style={{ backgroundColor: Color }} />
         <div className='d-strap' style={{ backgroundColor: strapColor }} />
         <div className='d-label' />
-        
+
         <img src={`img/${sticker}.png`} className="diarySticker" />
       </div>
 
