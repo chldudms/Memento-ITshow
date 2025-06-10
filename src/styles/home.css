@@ -1,5 +1,109 @@
+body {
+    overflow-y: auto;
+    background-color: #fcfcfc;
+}
+
 .diaryAddBtn {
+    position: fixed;
+    width: 130px;
+    bottom: 70px;
+    right: 280px;
+    z-index: 10;
+}
+
+.diaryList {
+   position: relative;
+    top: 150px;
+    right: 100px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    /* 좀 더 여백 줌 */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.diaryList img {
+    width: 330px;
+    /* 고정 높이로 비율 유지 */
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.diaryList img:hover {
+    transform: scale(1.03);
+}
+
+.diaryItem {
+    position: relative;
+    /* 기준 잡기 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.diary-Title {
+    margin-top: -20px;
+    font-size: 20px;
+    /* 타이틀 크게! */
+    color: #2e2e2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.diary-Sticker {
     position: absolute;
-    top: 890px;
-    right: 330px;
+    bottom: 100px;
+    right: 70px;
+    width: 40px !important;
+    /* 강제로 사이즈 고정 */
+    height: 40px !important;
+    z-index: 2;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.pw {
+    font-size: 25px;
+    display: flex;
+    margin-left: 5px;
+}
+
+.pwModal {
+    background-color: white;
+    padding: 60px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 1000;
+    font-size: 20px;
+}
+
+.submitBtn{
+    margin-left: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 10px 30px; 
+    border: 1px solid #7D7D7D;
+}
+
+.submitBtn:hover{
+    background-color: #cecece;
 }

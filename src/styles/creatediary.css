@@ -97,7 +97,6 @@ input:focus {
 .hashtags {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* <- 이렇게! */
     gap: 8px;
     /* 해시태그 사이 간격 */
     margin-top: 8px;
@@ -116,8 +115,11 @@ input:focus {
     transition: 0.2s;
 }
 
-.hashtags div:hover {
-    background-color: #ffe999;
+.hashtags div.selected {
+    background-color: #FFD447;
+    /* 선택됐을 때 배경색 */
+    color: #fff;
+    border-color: #FFC300;
 }
 
 .board {

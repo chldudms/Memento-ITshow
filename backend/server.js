@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const customRouter = require('./routes/customRouter');
 const emailRouter = require('./routes/emailRouter');
+const diaryRouter = require('./routes/diaryRouter')
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get('/download/:filename', (req, res) => {
 
 app.use('/', customRouter); // 커스텀 관련 라우터 등록
 app.use('/', emailRouter);  // 이메일 관련 라우터 등록
+app.use('/', diaryRouter);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
