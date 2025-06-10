@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../styles/downloaddiary.css';
 
 const DownloadDiary = () => {
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
   // 이메일 입력값 상태 업데이트
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,6 +26,8 @@ const DownloadDiary = () => {
       });
 
       alert(response.data.message || "이메일이 전송되었습니다!");
+      // 저장 후 다운로드 페이지로 이동
+      navigate("/");
     } catch (error) {
       console.error("이메일 전송 실패:", error);
       alert("이메일 전송 중 오류가 발생했습니다.");

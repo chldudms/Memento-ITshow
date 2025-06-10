@@ -33,11 +33,6 @@ interface StickerItem {
 const WriteDiary = () => {
   const navigate = useNavigate();
 
-  const handleClick = async () => {
-    await handleCaptureMainBox();  // 캡처 후 서버 저장 완료 대기
-    navigate("/downloadDiary");   // downloadDiary 경로로 이동
-  };
-
   // 모든 텍스트 박스 정보 저장
   const [textBoxes, setTextBoxes] = useState<TextBoxData[]>([]);
 
@@ -106,31 +101,31 @@ const WriteDiary = () => {
 
   // 다이어리 생성 날짜
   const [date, setDate] = useState('');
-  
+
   useEffect(() => {
     async function fetchDiary() {
       try {
         // 서버에서 가장 최근 작성된 다이어리 정보(title, created_at)를 가져옴
         const res = await axios.get('http://localhost:5001/latest-diary');
         setTitle(res.data.title);
-  
+
         // 날짜를 'YYYY-MM-DD' 형식의 문자열로 변환
         const dateStr = new Date(res.data.created_at).toLocaleDateString('ko-KR', {
           year: 'numeric',
           month: '2-digit',
           day: '2-digit',
         }).replace(/\.\s/g, '-').replace(/\.$/, '');
-  
+
         setDate(dateStr);
       } catch (error) {
         console.error('다이어리 정보 조회 실패:', error);
       }
     }
-  
+
     // 컴포넌트 마운트 시 다이어리 정보 불러오기
     fetchDiary();
   }, []);
-  
+
   // 지우개 모드가 변경될 때마다 해당 캔버스에만 적용
   useEffect(() => {
     if (CanvasRef.current) {
@@ -199,6 +194,7 @@ const WriteDiary = () => {
     setIsDrawing(true);
     setDrawToolbarVisible(true);
     setEraseMode(false);
+    setLineWidth(2);
 
     setSelectedTextBoxId(null);  // 텍스트 박스 선택 해제
     setColorPickerVisible(false); // 색상 선택기 숨기기
@@ -295,35 +291,22 @@ const WriteDiary = () => {
     setColorPickerVisible(true);
   };
 
-  // 캡처 & 저장 함수
-  const handleCaptureMainBox = async () => {
+  // 다이어리 화면 캡처 후, 미리보기 페이지로 상태와 함께 이동
+  const handleComplete = async () => {
     const mainBox = document.querySelector(".main-box") as HTMLElement | null;
     if (!mainBox) return;
 
     try {
-      // html2canvas로 .main-box 영역을 캡처해서 캔버스 생성
       const canvas = await html2canvas(mainBox, { backgroundColor: null });
-      // 캔버스를 PNG 데이터 URL(base64)로 변환
       const imageDataUrl = canvas.toDataURL("image/png");
 
-      // 서버에 이미지 데이터(base64) 전송
-      const response = await axios.post("http://localhost:5001/upload-image", {
-        image: imageDataUrl,
+      navigate("/previewDiary", {
+        state: {
+          imageDataUrl,       // 캡처된 이미지 데이터 URL
+        },
       });
-
-      // 서버가 저장한 이미지 다운로드용 URL 획득
-      const { imageUrl } = response.data;
-
-      console.log("저장된 이미지 URL:", imageUrl);
-
-      // 다운로드 링크 생성 및 클릭 이벤트 발생시켜 이미지 바로 다운로드
-      // const link = document.createElement("a");
-      // link.href = imageUrl;
-      // link.download = "diary_capture.png";
-      // link.click();
-
     } catch (error) {
-      console.error("캡처 오류:", error);
+      console.error("캡처 실패:", error);
     }
   };
 
@@ -362,7 +345,7 @@ const WriteDiary = () => {
       {/* 다이어리 본문 좌우 페이지 */}
       <div className="background-box" style={{ position: "relative" }} ref={backgroundBoxesRef}>
         <div className="box main-box" style={{ position: "relative", backgroundColor: backgroundColor }}>
-        <div className="date-text">{date}</div>
+          <div className="date-text">{date}</div>
           {/* 왼쪽 페이지 텍스트 박스 렌더링 */}
           {textBoxes
             .filter(box => box.parent === "main")
@@ -384,7 +367,7 @@ const WriteDiary = () => {
                 }} />
             ))}
           {isDrawing && (
-            // 왼쪽 페이지 그리기 캔버스 표시
+            // 그리기 캔버스 표시
             <div
               style={{ position: "relative", width: "100%", height: "100%" }}
             >
@@ -394,7 +377,7 @@ const WriteDiary = () => {
                 style={{
                   position: "absolute",
                   top: 0, left: 0, right: 0, bottom: 0,
-                  zIndex: 5,
+                  zIndex: 10,
                   background: "transparent",
                   pointerEvents: drawToolbarVisible ? "auto" : "none",
                 }}
@@ -442,6 +425,7 @@ const WriteDiary = () => {
                     prev.filter(i => i.id !== img.id)
                   );
                 }}
+                style={{ zIndex: 5 }}
               />
             ))}
           {showStickerToolbar && (
@@ -461,15 +445,16 @@ const WriteDiary = () => {
               initialWidth={100}
               initialHeight={100}
               onDelete={() => handleDeleteSticker(sticker.id)}
+              style={{ zIndex: 15 }}
             />
           ))}
           {/* 배경색상 툴바 컴포넌트 렌더링 (showBackgroundToolbar가 true일 때만) */}
           {showBackgroundToolbar ? (
             <BackgroundColorToolbar
               ref={backgroundColorToolbarRef}
-              backgroundColor={backgroundColor}  // 현재 좌측 배경색 보여줌
+              backgroundColor={backgroundColor}  
               setBackgroundColor={(color) => {
-                setBackgroundColor(color);       // 좌측 배경색 변경
+                setBackgroundColor(color);      
               }}
               onClose={() => setShowBackgroundToolbar(false)} // 닫기 버튼 클릭 시 툴바 숨김
             />
@@ -538,7 +523,7 @@ const WriteDiary = () => {
         alt="완료"
         className="complete-image"
         style={{ cursor: "pointer", width: 40, height: 40, position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}
-        onClick={handleClick}
+        onClick={handleComplete}
       />
     </div>
   );

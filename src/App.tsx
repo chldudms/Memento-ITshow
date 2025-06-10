@@ -4,6 +4,7 @@ import Start from './pages/start';
 import Home from './pages/home';
 import CreateDiary from './pages/createDiary'
 import WriteDiary from './pages/writeDiary'
+import PreviewDiary from './pages/previewDiary'
 import DownloadDiary from './pages/downloadDiary'
 import DiaryView from './pages/diaryView';
 
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/createDiary" element={<CreateDiary />} />
         <Route path="/writeDiary" element={<WriteDiary />} />
+        <Route path="/previewDiary" element={<PreviewDiary />} />
         <Route path="/downloadDiary" element={<DownloadDiary />} />
         <Route path='/diaryview' element={<DiaryView/>} />
       </Routes>

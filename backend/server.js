@@ -26,6 +26,8 @@ app.get('/download/:filename', (req, res) => {
   });
 });
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/', customRouter); // 커스텀 관련 라우터 등록
 app.use('/', emailRouter);  // 이메일 관련 라우터 등록
 app.use('/', diaryRouter);
