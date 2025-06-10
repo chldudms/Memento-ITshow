@@ -5,6 +5,7 @@ import "../styles/previewdiary.css";
 import imageIcon from "../assets/preview.png";
 import arrow_back from "../assets/arrow_back.png";
 import saveIcon from "../assets/download.png";
+import Swal from 'sweetalert2';
 
 const PreviewDiary = () => {
     const location = useLocation();
@@ -29,19 +30,37 @@ const PreviewDiary = () => {
         }
     };
 
-    // 되돌아가기 버튼 클릭 시, 작성 페이지로 상태값을 그대로 전달하며 이동
-    const handleBack = () => {
-        const confirmLeave = window.confirm(
-          "작성 중인 내용이 초기화됩니다. 계속하시겠습니까?"
-        );
-        if (confirmLeave) {
-          navigate("/writeDiary", {
-            state: {
-              imageDataUrl,
-            }
-          });
+    // 되돌아가기 버튼 클릭 시 커스텀다이어리 페이지로 이동
+    const handleBack = async () => {
+        const result = await handleLeaveClick(); // 호출 및 결과 대기
+        if (result) {
+            navigate("/writeDiary", {
+                state: {
+                    imageDataUrl,
+                }
+            });
         }
-      };      
+    };
+
+    const handleLeaveClick = async () => {
+        const result = await Swal.fire({
+            title: '작성 중인 내용이 초기화됩니다.',
+            html: '<b>계속하시겠습니까?</b>',
+            background: '#fff',
+            showCancelButton: true,
+            confirmButtonText: '돌아갈래!',
+            cancelButtonText: '계속할래!',
+            customClass: {
+                popup: 'alert-popup',
+                title: 'alert-title',
+                htmlContainer: 'alert-html',
+                confirmButton: 'alert-confirm',
+                cancelButton: 'alert-cancel',
+            },
+        });
+
+        return result.isConfirmed;
+    };
 
     return (
         <div>

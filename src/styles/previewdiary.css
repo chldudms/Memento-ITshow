@@ -1,7 +1,48 @@
-.previewImage{
+.previewImage {
     position: absolute;
     top: 229px;
     left: 17.3%;
     width: 1257.12px;
     height: 691.58px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alert-popup {
+    border-radius: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 1.2rem 1.8rem;
+    background: linear-gradient(#FEF5F0, #F5BBD3);
+    color: #9b6078;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.alert-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #e32c6f;
+}
+
+.alert-html {
+    font-size: 1.3rem;
+    color: #7c7679;
+}
+
+.alert-confirm {
+    background-color: #f4a9bc;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 1.4rem;
+    color: white;
+    border: none;
+}
+
+.alert-cancel {
+    background-color: #fce0ea;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 1.4rem;
+    color: #8b5e6b;
+    border: none;
 }

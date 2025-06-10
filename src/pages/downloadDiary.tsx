@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../styles/downloaddiary.css';
+import Swal from 'sweetalert2';
 
 const DownloadDiary = () => {
   const [email, setEmail] = useState('');
@@ -15,8 +16,18 @@ const DownloadDiary = () => {
   // 이메일 입력 후 서버에 전송 요청
   const handleDownload = async () => {
     if (!email) {
-      alert("이메일을 입력해주세요.");
-      return; 
+      await Swal.fire({
+        title: '이메일을 입력해주세요.',
+        icon: undefined,
+        background: '#fff',
+        timer: 1000,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'warn-popup',
+          title: 'warn-title',
+        },
+      });
+      return;
     }
 
     try {
@@ -25,12 +36,34 @@ const DownloadDiary = () => {
         email,
       });
 
-      alert(response.data.message || "이메일이 전송되었습니다!");
+      // 이메일 전송 후 알림 표시
+      await Swal.fire({
+        title: response.data.message || "이메일이 전송되었습니다!",
+        icon: undefined,
+        background: '#fff',
+        timer: 1000,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'warn-popup',
+          title: 'warn-title',
+        },
+      });
+
       // 저장 후 다운로드 페이지로 이동
       navigate("/");
     } catch (error) {
       console.error("이메일 전송 실패:", error);
-      alert("이메일 전송 중 오류가 발생했습니다.");
+      await Swal.fire({
+        title: '이메일 전송 중 오류가 발생했습니다.',
+        icon: undefined,
+        background: '#fff',
+        timer: 1000,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'warn-popup',
+          title: 'warn-title',
+        },
+      });
     }
   };
 
