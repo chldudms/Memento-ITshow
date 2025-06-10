@@ -452,9 +452,9 @@ const WriteDiary = () => {
           {showBackgroundToolbar ? (
             <BackgroundColorToolbar
               ref={backgroundColorToolbarRef}
-              backgroundColor={backgroundColor}  
+              backgroundColor={backgroundColor}
               setBackgroundColor={(color) => {
-                setBackgroundColor(color);      
+                setBackgroundColor(color);
               }}
               onClose={() => setShowBackgroundToolbar(false)} // 닫기 버튼 클릭 시 툴바 숨김
             />

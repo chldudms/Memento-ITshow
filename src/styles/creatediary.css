@@ -178,3 +178,19 @@ input:focus {
     left: 1500px;
     border-radius: 20px;
 }
+
+.warn-popup {
+    border-radius: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 1.2rem 1.8rem;
+    background: linear-gradient(#FEF5F0, #F5BBD3);
+    color: #9b6078;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.warn-title {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #e32c6f;
+}

@@ -3,6 +3,7 @@ import Header from '../components/header';
 import '../styles/home.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 interface Diary {
   id: number;
@@ -20,7 +21,7 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [inputPw, setInputPw] = useState(""); // 유저 입력값
   const [selectedDiary, setSelectedDiary] = useState<Diary | null>(null); // 클릭된 다이어리 저장
-  const [diaryPw, setPw]= useState("");
+  const [diaryPw, setPw] = useState("");
 
   function diaryView(diary: Diary) {
     setPw(diary.password)
@@ -36,19 +37,28 @@ const Home = () => {
     }
   }
 
-  const passwordCheck = () => {
+  const passwordCheck = async () => {
     if (selectedDiary && inputPw === selectedDiary.password) {
-      console.log(inputPw)
-      console.log(selectedDiary.password)
+      console.log(inputPw);
+      console.log(selectedDiary.password);
       localStorage.setItem('diaryId', selectedDiary.id.toString());
       navigate("/DiaryView");
       setShowModal(false);
       setInputPw("");
     } else {
-      alert("비밀번호가 일치하지 않습니다");
+      await Swal.fire({
+        title: '비밀번호가 일치하지 않습니다.',
+        icon: undefined,
+        background: '#fff',
+        timer: 1000,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'warn-popup',
+          title: 'warn-title',
+        },
+      });
     }
   };
-
 
   useEffect(() => {
     const fetchDiaries = async () => {
@@ -58,8 +68,8 @@ const Home = () => {
         console.log(response.data)
 
       } catch (error) {
-        console.error('다이어리 불러오기 실패', error);
-      } 
+        console.error('다이어리 불러오기 실패.', error);
+      }
     };
     fetchDiaries();
   }, []);
@@ -82,7 +92,7 @@ const Home = () => {
             {v.sticker && (
               <img src={`img/${v.sticker}.png`} className="diary-Sticker" />
             )}            <p className="diary-Title">{v.title}</p>
-            {v.hashtags && <div className="hashs">{v.hashtags}</div>}  
+            {v.hashtags && <div className="hashs">{v.hashtags}</div>}
           </div>
         ))}
       </div>
@@ -91,13 +101,13 @@ const Home = () => {
         <div className="modalOverlay">
           <div className="pwModal">
             <p className="pw">다이어리 비밀번호</p>
-            <input placeholder="다이어리 비밀번호를 입력 해주세요"
+            <input placeholder="다이어리 비밀번호를 입력 해주세요."
               onChange={(e) => setInputPw(e.target.value)} />
             <button className="submitBtn" onClick={passwordCheck}>확인</button>
           </div>
         </div>
       )}
-      
+
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Header from '../components/header';
 import axios from "axios";
 import { Navigate, useNavigate } from 'react-router-dom';
 import { colorList } from '../constants/colorList';
+import Swal from 'sweetalert2';
 
 const CreateDiary = () => {
     const navigator = useNavigate()
@@ -22,7 +23,7 @@ const CreateDiary = () => {
     const hashs = ["#아이티쇼", "#일상기록", "#감정일기", "#특별한일"]
     const stickers = ["smile", "cry", "sad", "lovely", "thinking", "star"];
 
-  
+
 
     function chgCoverColor(colorId: string) {
         setSelectedColorId(colorId);
@@ -41,25 +42,45 @@ const CreateDiary = () => {
 
     const addDiary = async () => {
         if (diaryTitle.trim() === "") {
-            alert("다이어리 제목을 입력해주세요!");
+            await Swal.fire({
+                title: '다이어리 제목을 입력해주세요!',
+                icon: undefined,
+                background: '#fff',
+                timer: 1000,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'warn-popup',
+                    title: 'warn-title',
+                },
+            });
             return;
         }
 
         try {
             const response = await axios.post("http://localhost:5001/addDiary", {
                 title: diaryTitle,
-                color: selectedColorId,  
+                color: selectedColorId,
                 hashtags: hashtag,
                 sticker: stickerShape,
                 password: diaryKey,
             });
 
             console.log("서버 응답:", response.data);
-            alert("다이어리 저장 완료");
+            await Swal.fire({
+                title: '다이어리 생성 완료!',
+                icon: undefined,
+                background: '#fff',
+                timer: 1000,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'warn-popup',
+                    title: 'warn-title',
+                },
+            });
+
             navigator("/writeDiary");
         } catch (err) {
-            console.error("에러 발생", err);
-            alert("저장 실패");
+            console.error("에러 발생 : 저장 실패", err);
         }
     };
 
@@ -75,7 +96,7 @@ const CreateDiary = () => {
                     value={diaryTitle}
                     onChange={(e) => setTitle(e.target.value)}
                 />
-                 <p>커버 색상</p>
+                <p>커버 색상</p>
                 <div className="colorGrid">
                     {colorList.map(({ id, color }) => (
                         <button
@@ -92,7 +113,7 @@ const CreateDiary = () => {
                     {hashs.map((hash) => (
                         <div
                             key={hash}
-                            className={`hashtag ${hashtag === hash ? 'selected' : ''}`}                            
+                            className={`hashtag ${hashtag === hash ? 'selected' : ''}`}
                             onClick={() => setHash(hash)}>
                             {hash}
                         </div>
@@ -137,7 +158,7 @@ const CreateDiary = () => {
                 <div className='label' />
             </div>
 
-            <button className='diaryCreateBtn' type='submit' onClick={()=>addDiary()}>완료</button>
+            <button className='diaryCreateBtn' type='submit' onClick={() => addDiary()}>완료</button>
         </div>
     );
 };
