@@ -88,11 +88,16 @@ const Home = () => {
       <div className="diaryList">
         {diaries.map((v, i) => (
           <div onClick={() => diaryView(v)} className="diaryItem" key={i}>
-            <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${i + 1}`} />
-            {v.sticker && (
-              <img src={`img/${v.sticker}.png`} className="diary-Sticker" />
-            )}            <p className="diary-Title">{v.title}</p>
-            {v.hashtags && <div className="hashs">{v.hashtags}</div>}
+            <div className="imageContainer">
+              <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${i + 1}`} />
+              {v.sticker && (
+                <img src={`img/${v.sticker}.png`} className="diary-Sticker" alt="감정 스티커" />
+              )}
+            </div>
+            <div className="contentContainer">
+              <p className="diary-Title">{v.title}</p>
+              {v.hashtags && <div className="hashs">{v.hashtags}</div>}
+            </div>
           </div>
         ))}
       </div>
