@@ -6,13 +6,13 @@ body {
 .diaryAddBtn {
     position: fixed;
     width: 90px;
-    bottom: 70px;
-    right: 280px;
+    bottom: 100px;
+    right: 300px;
     z-index: 10;
 }
 
 .diaryList {
-   position: relative;
+    position: relative;
     top: 110px;
     right: 30px;
     display: grid;
@@ -47,7 +47,6 @@ body {
 .diary-Title {
     margin-top: -20px;
     font-size: 20px;
-    /* 타이틀 크게! */
     color: #2e2e2e;
     white-space: nowrap;
     overflow: hidden;
@@ -57,8 +56,8 @@ body {
 
 .diary-Sticker {
     position: absolute;
-    bottom: 160px;
-    right: 70px;
+    top: 270px;
+    right: 60px;
     width: 40px !important;
     /* 강제로 사이즈 고정 */
     height: 40px !important;
@@ -96,20 +95,20 @@ body {
     font-size: 20px;
 }
 
-.submitBtn{
+.submitBtn {
     margin-left: 30px;
     background-color: #ffffff;
     border-radius: 20px;
-    padding: 10px 30px; 
+    padding: 10px 30px;
     border: 1px solid #7D7D7D;
 }
 
-.submitBtn:hover{
+.submitBtn:hover {
     background-color: #cecece;
 }
 
-.hashs{
-background-color: #fffdf0;
+.hashs {
+    background-color: #fffdf0;
     border: 2px solid #FFD447;
     border-radius: 20px;
     padding: 8px 12px;
