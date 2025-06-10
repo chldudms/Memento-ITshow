@@ -73,3 +73,10 @@ d-input::placeholder {
     color: white;
     letter-spacing: 1px;
 }
+
+.diarySticker{
+    position: relative;
+    width: 40px;
+    top: 530px;
+    left: 1010px;
+}

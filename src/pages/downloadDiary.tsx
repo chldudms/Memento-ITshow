@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../styles/downloaddiary.css';
 import Swal from 'sweetalert2';
+import { colorList } from "../constants/colorList";
 
 const DownloadDiary = () => {
   const [email, setEmail] = useState('');
+  const [coverColor, setColor] = useState("gray")
+  const [strapColor,setStrap] = useState("")
+  const [sticker, setSticker] = useState("")
+  const [Color, setCover] = useState("gray")
+
+  const [diaryData, setData] = useState("")
   const navigate = useNavigate();
 
   // 이메일 입력값 상태 업데이트
@@ -13,7 +20,38 @@ const DownloadDiary = () => {
     setEmail(e.target.value);
   };
 
-  // 이메일 입력 후 서버에 전송 요청
+  useEffect(() => {
+    // 로컬 스토리지에서 diaryData 불러오기
+    const data = localStorage.getItem("diaryData");
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        if (parsed.color) {
+          setColor(parsed.color); 
+        }
+        if (parsed.sticker) {
+          setSticker(parsed.sticker); 
+        }
+      } catch (err) {
+        console.error("데이터 파싱 오류:", err);
+      }
+    }
+  }, []); 
+
+  useEffect(() => {
+    const selectedColorData = colorList.find(
+      (colorItem) => colorItem.id === coverColor
+    );
+
+    if (selectedColorData) {
+      setCover(selectedColorData.color)
+      setStrap(selectedColorData.strapColor);
+    } else {
+      setStrap(""); 
+    
+      console.warn(`${coverColor}`);
+    }
+  }, [coverColor, colorList]); 
   const handleDownload = async () => {
     if (!email) {
       await Swal.fire({
@@ -72,9 +110,11 @@ const DownloadDiary = () => {
       {/* 다이어리 커버 UI */}
       <div className="white-box"></div>
       <div className='diaryCover'>
-        <div className='d-cover' />
-        <div className='d-strap' />
+        <div className='d-cover' style={{ backgroundColor: Color }} />
+        <div className='d-strap' style={{ backgroundColor: strapColor }} />
         <div className='d-label' />
+        
+        <img src={`img/${sticker}.png`} className="diarySticker" />
       </div>
 
       {/* 이메일 입력 */}
