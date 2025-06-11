@@ -51,6 +51,20 @@ const CreateDiary = () => {
             });
             return;
         }
+        else if (diaryKey.length > 4) {
+            await Swal.fire({
+                title: '비밀번호를 4자리 이하로 입력해주세요!',
+                icon: undefined,
+                background: '#fff',
+                timer: 1000,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'warn-popup',
+                    title: 'warn-title',
+                },
+            });
+            return;
+        }
 
         const diaryData = { "title": diaryTitle, "color": selectedColorId, "sticker": stickerShape }
         localStorage.setItem("diaryData", JSON.stringify(diaryData))
