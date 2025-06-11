@@ -1,6 +1,6 @@
 .options {
     position: absolute;
-    top: 100px;
+    top: 145px;
     size: 30px;
     left: 330px;
     font-size: 26px;
@@ -64,7 +64,7 @@ input:focus {
 
 .Cover {
     position: fixed;
-    top: 270px;
+    top: 273px;
     right: 330px;
     width: 430px;
     height: 600px;
@@ -74,7 +74,7 @@ input:focus {
 
 .strap {
     position: fixed;
-    top: 270px;
+    top: 273px;
     right: 730px;
     width: 32px;
     height: 600px;
@@ -84,7 +84,7 @@ input:focus {
 
 .label {
     position: fixed;
-    top: 316px;
+    top: 319px;
     right: 400px;
     width: 270px;
     height: 80px;
@@ -133,6 +133,7 @@ input:focus {
     grid-template-columns: repeat(6, 50px); /*  4개씩 간격 - */
     gap: 30px;
     justify-content: center;
+    margin-bottom: -50px;
 }
 
 .stickers {
@@ -149,8 +150,8 @@ input:focus {
 .smileEx {
     background-color: #FFD447;
     position: fixed;
-    bottom: 250px;
-    right: 370px;
+    bottom: 235px;
+    right: 360px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -158,19 +159,24 @@ input:focus {
     cursor: pointer;
     transition: transform 0.2s ease;
     z-index: 10;
-
 }
 
 .diaryCreateBtn {
     position: absolute;
-    color: #ffff;
+    color: #000000;
     font-size: 18px;
     width: 220px;
     height: 60px;
-    background-color: #222222;
-    top: 930px;
+    background-color: #dcdcdc;
+    top: 946px;
     left: 1500px;
     border-radius: 20px;
+    border: none;
+}
+
+.diaryCreateBtn:hover {
+    background-color: #ffc8ed;
+    color: #fff;
 }
 
 .warn-popup {

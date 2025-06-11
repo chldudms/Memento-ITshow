@@ -133,7 +133,6 @@ const CreateDiary = () => {
                     ))}
                 </div>
 
-
                 <p>스티커</p>
                 <div className='board' />
                 <div className='sticker'>
@@ -147,7 +146,7 @@ const CreateDiary = () => {
                     ))}
                 </div>
 
-                <p>다이어리 암호 설정 (선택)</p>
+                <p>암호 설정 (선택)</p>
                 <div>
                     <input
                         type='text'
