@@ -6,6 +6,8 @@ const Header = () => {
     const navigate = useNavigate();
 
     const handleHome = () => {
+        // 필터 유지 플래그 제거해서 전체 목록 보여주기
+        localStorage.removeItem('selectedHashtag');
         navigate('/home');
     };
 

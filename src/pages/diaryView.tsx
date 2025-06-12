@@ -24,6 +24,10 @@ function DiaryView() {
     }, [diaryId]);
 
     const handleBack = () => {
+        const selectedHashtag = localStorage.getItem('selectedHashtag');
+        if (selectedHashtag) {
+            localStorage.setItem('keepHashtagFilter', 'true'); // 해시태그 필터 복원 플래그 설정
+        }
         navigate('/home');
     };
 

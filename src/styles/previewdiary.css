@@ -37,6 +37,10 @@
     border: none;
 }
 
+.alert-confirm:hover {
+    background-color: #f17f9c;
+}
+
 .alert-cancel {
     background-color: #fce0ea;
     border-radius: 10px;
@@ -45,4 +49,8 @@
     padding: 0.5rem 1.4rem;
     color: #8b5e6b;
     border: none;
+}
+
+.alert-cancel:hover {
+    background-color: #fac2d5;
 }

@@ -75,7 +75,7 @@ const PreviewDiary = () => {
             <img src={imageIcon}
                 alt="미리보기 이미지"
                 className="image"
-                style={{ cursor: "pointer", width: 40, height: 40, position: "fixed", top: 250, right: 350, zIndex: 1000 }}
+                style={{ width: 40, height: 40, position: "fixed", top: 250, right: 350, zIndex: 1000 }}
             />
             {/* 캡처된 이미지 미리보기 출력 */}
             <img src={imageDataUrl} className="previewImage" alt="미리보기 이미지" />

@@ -123,6 +123,18 @@ const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
       }
     };
 
+    const resizeHandleStyle = {
+      background: isSelected ? '#FF90BB' : 'transparent',
+      border: isSelected ? '2px solid #FF90BB' : 'none',
+      borderRadius: '50%',
+      width: '12px',
+      height: '12px',
+      right: '-6px',
+      bottom: '-6px',
+      position: 'absolute' as const,
+      cursor: 'nw-resize'
+    };
+
     return (
       <div
         ref={divRef}
@@ -155,7 +167,7 @@ const TextBox = forwardRef<TextBoxRef, TextBoxProps>(
           value={text}
           spellCheck={false}
         />
-        <div {...bindResize()} className="resize-handle" />
+        <div {...bindResize()} className="resize-handle" style={resizeHandleStyle} />
       </div>
     );
   }

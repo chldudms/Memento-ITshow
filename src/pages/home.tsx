@@ -21,17 +21,15 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [inputPw, setInputPw] = useState(""); // 유저 입력값
   const [selectedDiary, setSelectedDiary] = useState<Diary | null>(null); // 클릭된 다이어리 저장
-  const [diaryPw, setPw] = useState("");
+  const [selectedHashtag, setSelectedHashtag] = useState<string | null>(null);
 
   function diaryView(diary: Diary) {
-    setPw(diary.password)
-    console.log(inputPw)
+    // 비밀번호가 있는 다이어리는 모달 오픈
     if (diary.password) {
-      // 비번 있는 다이어리는 모달 오픈
       setSelectedDiary(diary);
       setShowModal(true);
     } else {
-      // 비번 없는 다이어리는 바로 페이지로 이동
+      // 비밀번호 없는 다이어리는 바로 페이지로 이동
       localStorage.setItem('diaryId', diary.id.toString());
       navigate("/DiaryView");
     }
@@ -39,8 +37,6 @@ const Home = () => {
 
   const passwordCheck = async () => {
     if (selectedDiary && inputPw === selectedDiary.password) {
-      console.log(inputPw);
-      console.log(selectedDiary.password);
       localStorage.setItem('diaryId', selectedDiary.id.toString());
       navigate("/DiaryView");
       setShowModal(false);
@@ -63,10 +59,22 @@ const Home = () => {
   useEffect(() => {
     const fetchDiaries = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/loadDiarys');
-        setDiaries(response.data);
-        console.log(response.data)
+        const keepFilter = localStorage.getItem('keepHashtagFilter');
+        const storedTag = localStorage.getItem('selectedHashtag');
 
+        if (keepFilter && storedTag) {
+          // 플래그가 있고 저장된 태그가 있으면 필터된 목록 불러오기
+          const response = await axios.get(`http://localhost:5001/loadHashtagDiarys?hashtag=${encodeURIComponent(storedTag)}`);
+          setDiaries(response.data);
+          setSelectedHashtag(storedTag);
+          localStorage.removeItem('keepHashtagFilter'); // 플래그는 사용 후 제거
+        } else {
+          // 플래그 없으면 전체 목록 불러오기
+          const response = await axios.get('http://localhost:5001/loadDiarys');
+          setDiaries(response.data);
+          setSelectedHashtag(null);
+          localStorage.removeItem('selectedHashtag'); // 태그도 제거해서 초기화
+        }
       } catch (error) {
         console.error('다이어리 불러오기 실패.', error);
       }
@@ -88,6 +96,25 @@ const Home = () => {
     }
   };
 
+  // 해시태그별 다이어리 목록 필터링
+  const handleHashtagClick = async (tag: string) => {
+    try {
+      if (selectedHashtag === tag) {
+        const response = await axios.get('http://localhost:5001/loadDiarys');
+        setDiaries(response.data);
+        setSelectedHashtag(null);
+        localStorage.removeItem('selectedHashtag'); // 저장된 해시태그 제거
+      } else {
+        const response = await axios.get(`http://localhost:5001/loadHashtagDiarys?hashtag=${encodeURIComponent(tag)}`);
+        setDiaries(response.data);
+        setSelectedHashtag(tag);
+        localStorage.setItem('selectedHashtag', tag); // 해시태그 저장
+      }
+    } catch (error) {
+      console.error('다이어리 불러오기 실패:', error);
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -99,17 +126,24 @@ const Home = () => {
       />
 
       <div className="diaryList">
-        {diaries.map((v, i) => (
-          <div onClick={() => diaryView(v)} className="diaryItem" key={i}>
+        {diaries.map((v) => (
+          <div onClick={() => diaryView(v)} className="diaryItem" key={v.id}>
             <div className="imageContainer">
-              <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${i + 1}`} />
+              <img src={`img/${v.color}Cover.png`} alt={`다이어리 ${v.title}`} />
               {v.sticker && (
                 <img src={`img/${v.sticker}.png`} className="diary-Sticker" alt="감정 스티커" />
               )}
             </div>
             <div className="contentContainer">
               <p className="diary-Title">{v.title}</p>
-              {v.hashtags && <div className="hashs">{v.hashtags}</div>}
+              {v.hashtags && (
+                <div className="hashs" onClick={(e) => {
+                  e.stopPropagation(); // 부모 클릭 이벤트 방지
+                  handleHashtagClick(v.hashtags);
+                }}>
+                  {v.hashtags}
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -119,13 +153,21 @@ const Home = () => {
         <div className="modalOverlay" onClick={handleOverlayClick}>
           <div className="pwModal">
             <p className="pw">다이어리 비밀번호</p>
-            <input placeholder="다이어리 비밀번호를 입력 해주세요."
-              onChange={(e) => setInputPw(e.target.value)} />
+            <input
+              placeholder="다이어리 비밀번호를 입력 해주세요."
+              onChange={(e) => setInputPw(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  passwordCheck();
+                }
+              }}
+              value={inputPw}
+              type="password"
+            />
             <button className="submitBtn" onClick={passwordCheck}>확인</button>
           </div>
         </div>
       )}
-
     </div>
   );
 };

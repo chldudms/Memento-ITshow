@@ -23,11 +23,12 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
     style,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const imageRef = useRef<HTMLImageElement>(null);
 
-    // 부모 박스(왼쪽 + 오른쪽 박스 합친 영역) 크기 상태
+    // 부모 박스 크기 상태
     const [bounds, setBounds] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
 
-    // 이미지 위치 상태 (왼쪽 박스 기준 0,0 시작)
+    // 이미지 위치 상태
     const [position, setPosition] = useState({ x: initialLeft, y: initialTop });
 
     // 이미지 크기 상태
@@ -36,22 +37,21 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
     // 이미지 선택/포커스 상태
     const [isFocused, setIsFocused] = useState(false);
 
-    // 컴포넌트 마운트 시, main-box의 크기를 계산해 bounds 설정
+    // 리사이즈 중인지 확인하는 상태 (중요!)
+    const [isResizing, setIsResizing] = useState(false);
+
+    // 컴포넌트 마운트 시 bounds 설정
     useEffect(() => {
         const mainBox = document.querySelector(".main-box");
-
         if (mainBox) {
             const mainRect = mainBox.getBoundingClientRect();
-
-            // 메인 박스의 시작(left)부터 끝(right)까지 합친 너비와 최대 높이 계산
             const combinedWidth = 1060.30;
             const combinedHeight = Math.max(mainRect.height);
-
             setBounds({ width: combinedWidth, height: combinedHeight });
         }
     }, []);
 
-    // 외부 클릭 시 이미지 포커스 해제 처리
+    // 외부 클릭 시 포커스 해제
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
@@ -63,39 +63,67 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
         };
 
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
 
-    // useGesture로 드래그 이벤트 바인딩
+    // useGesture 바인딩 - 리사이즈 중일 때는 드래그 비활성화
     const bind = useGesture(
         {
-            // 드래그 중일 때 위치 업데이트, bounds 안에서만 움직임 허용
-            onDrag: ({ delta: [dx, dy] }) => {
+            onDrag: ({ delta: [dx, dy], event }) => {
+                // 리사이즈 중이거나 리사이즈 핸들을 클릭한 경우 드래그 무시
+                if (isResizing) return;
+
+                // 리사이즈 핸들 클릭 감지
+                const target = event.target as HTMLElement;
+                if (target.closest('.react-resizable-handle')) {
+                    return;
+                }
+
                 setPosition((pos) => {
                     const newX = Math.min(Math.max(0, pos.x + dx), bounds.width - size.width);
                     const newY = Math.min(Math.max(0, pos.y + dy), bounds.height - size.height);
                     return { x: newX, y: newY };
                 });
-                setIsFocused(true); // 드래그 시 포커스 유지
+                setIsFocused(true);
             },
-            // 드래그 시작 시 포커스 설정
-            onDragStart: () => {
+            onDragStart: ({ event }) => {
+                // 리사이즈 핸들 클릭 시 드래그 시작 방지
+                const target = event.target as HTMLElement;
+                if (target.closest('.react-resizable-handle') || isResizing) {
+                    return false;
+                }
                 setIsFocused(true);
             }
         },
         {
             drag: {
-                from: () => [position.x, position.y], // 드래그 시작 위치 지정
-                filterTaps: true, // 탭 동작 걸러내기
-                pointer: { touch: true }, // 터치 이벤트도 활성화
+                // 리사이즈 중일 때는 드래그 비활성화
+                enabled: !isResizing,
+                filterTaps: true,
+                pointer: { touch: true },
             },
         }
     );
 
-    // 리사이즈 종료 시 호출되는 콜백
+    // 리사이즈 시작 시 호출
+    const handleResizeStart = () => {
+        setIsResizing(true);
+        setIsFocused(true);
+    };
+
+    // 리사이즈 중 호출 (실시간 크기 업데이트 방지)
+    const handleResize = (
+        e: MouseEvent | TouchEvent,
+        direction: any,
+        ref: HTMLElement,
+        delta: { width: number; height: number }
+    ) => {
+        // 실시간 크기 업데이트는 하지 않음 (위치 변경 방지)
+    };
+
+    // 리사이즈 완료 시 호출
     const handleResizeStop = (
         e: MouseEvent | TouchEvent,
         direction: any,
@@ -109,13 +137,17 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
         newWidth = Math.min(newWidth, bounds.width - position.x);
         newHeight = Math.min(newHeight, bounds.height - position.y);
 
+        // 위치는 그대로 두고 크기만 업데이트
         setSize({
             width: newWidth,
             height: newHeight,
         });
+
+        // 리사이즈 완료
+        setIsResizing(false);
     };
 
-    // 삭제키(Backspace, Delete) 입력 시 삭제 콜백 호출 처리
+    // 삭제 키 처리
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (isFocused && (e.key === "Delete" || e.key === "Backspace")) {
@@ -135,50 +167,71 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
     return (
         <div
             ref={containerRef}
-            {...bind()} // useGesture 바인딩 적용
+            {...bind()} // useGesture 바인딩
             style={{
                 position: "absolute",
                 top: position.y,
                 left: position.x,
                 width: size.width,
                 height: size.height,
-                touchAction: "none", // 터치 스크롤 막기
-                border: isFocused ? "2px dashed #999" : "none", // 포커스 시 테두리 표시
+                touchAction: "none",
+                border: isFocused ? "2px dashed #999" : "none",
                 backgroundColor: "transparent",
-                userSelect: "none", // 텍스트 선택 방지
-                cursor: "grab", // 마우스 커서 표시
+                userSelect: "none",
+                cursor: isResizing ? "default" : "grab", // 리사이즈 중일 때 커서 변경
                 zIndex: style?.zIndex ?? 5,
             }}
-            onClick={() => setIsFocused(true)} // 클릭 시 포커스 활성화
+            onClick={(e) => {
+                // 리사이즈 핸들 클릭 시 포커스 이벤트 방지
+                if (!(e.target as HTMLElement).closest('.react-resizable-handle')) {
+                    setIsFocused(true);
+                }
+            }}
         >
             <Resizable
                 size={{ width: size.width, height: size.height }}
-                onResizeStop={handleResizeStop} // 리사이즈 완료 시 콜백
+                onResizeStart={handleResizeStart} // 리사이즈 시작
+                onResize={handleResize} // 리사이즈 중 (사용하지 않음)
+                onResizeStop={handleResizeStop} // 리사이즈 완료
                 minWidth={50}
                 minHeight={50}
-                maxWidth={bounds.width - position.x} // bounds 내 최대 크기 제한
+                maxWidth={bounds.width - position.x}
                 maxHeight={bounds.height - position.y}
-                enable={{ bottomRight: true }} // 오른쪽 하단만 리사이즈 가능
+                enable={{ bottomRight: true }}
                 style={{
                     width: "100%",
                     height: "100%",
                     position: "relative",
-                    touchAction: "none", // 터치 스크롤 막기
+                    touchAction: "none",
+                }}
+                handleStyles={{
+                    bottomRight: {
+                        background: isFocused ? '#FF90BB' : 'transparent',
+                        border: isFocused ? '2px solid #FF90BB' : 'none',
+                        borderRadius: '50%',
+                        width: '12px',
+                        height: '12px',
+                        right: '-6px',
+                        bottom: '-6px',
+                    }
                 }}
             >
-                {/* 클릭 시 이벤트 버블링 방지 (포커스 해제 방지) */}
-                <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", height: "100%" }}>
+                <div
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ width: "100%", height: "100%" }}
+                >
                     <img
+                        ref={imageRef}
                         src={src}
                         alt={alt || "uploaded"}
                         style={{
                             width: "100%",
                             height: "100%",
-                            pointerEvents: "none", // 이미지 자체는 이벤트 무시
+                            pointerEvents: "none",
                             display: "block",
-                            zIndex: 20,
+                            objectFit: "contain", // 이미지 비율 유지
                         }}
-                        draggable={false} // 드래그 방지
+                        draggable={false}
                     />
                 </div>
             </Resizable>
