@@ -72,6 +72,7 @@ d-input::placeholder {
     font-weight: lighter;
     color: white;
     letter-spacing: 1px;
+    cursor: pointer;
 }
 
 .diarySticker {

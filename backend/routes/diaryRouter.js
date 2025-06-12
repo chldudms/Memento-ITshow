@@ -33,6 +33,28 @@ router.get('/loadDiarys', async (req, res) => {
   }
 });
 
+// 해시태그별로 다이어리 목록 로드 
+router.get('/loadHashtagDiarys', async (req, res) => {
+  const { hashtag } = req.query;
+
+  try {
+    let query = 'SELECT * FROM diary';
+    let params = [];
+
+    if (hashtag) {
+      query += ' WHERE hashtags = ?';
+      params.push(hashtag);
+    }
+
+    query += ' ORDER BY created_at DESC';
+
+    const [rows] = await db.query(query, params);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('서버 에러!');
+  }
+});
 
 // 다이어리 내용 조회
 router.get('/diary/:id/images', async (req, res) => {
@@ -52,6 +74,7 @@ router.get('/diary/:id/images', async (req, res) => {
     res.status(500).send('서버 에러');
   }
 });
+
 
 
 module.exports = router;

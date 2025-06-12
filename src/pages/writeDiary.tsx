@@ -203,6 +203,7 @@ const WriteDiary = () => {
   // 그리기 툴바 닫기 처리
   const handleCloseDrawCustom = () => {
     setDrawToolbarVisible(false);
+    setIsDrawing(false); // 그리기 모드 비활성화
   };
 
   // 바깥 클릭 시 선택 해제 및 커스텀(텍스트) 숨김 처리
@@ -235,6 +236,7 @@ const WriteDiary = () => {
       setSelectedTextBoxId(null);
       setColorPickerVisible(false);
       setDrawToolbarVisible(false);
+      setIsDrawing(false);
       setShowStickerToolbar(false);
       setShowBackgroundToolbar(false);
     };
@@ -346,6 +348,28 @@ const WriteDiary = () => {
       <div className="background-box" style={{ position: "relative" }} ref={backgroundBoxesRef}>
         <div className="box main-box" style={{ position: "relative", backgroundColor: backgroundColor }}>
           <div className="date-text">{date}</div>
+
+          {/* 그리기 캔버스 - 항상 렌더링, pointerEvents로 활성화/비활성화 제어 */}
+          <div
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 5 }}
+          >
+            <ReactSketchCanvas
+              ref={CanvasRef}
+              canvasColor="transparent"
+              style={{
+                position: "absolute",
+                top: 0, left: 0, right: 0, bottom: 0,
+                background: "transparent",
+                pointerEvents: isDrawing ? "auto" : "none", // 그리기 모드일 때만 포인터 이벤트 활성화
+              }}
+              strokeWidth={lineWidth}
+              eraserWidth={lineWidth}
+              strokeColor={selectedColor}
+              width="100%"
+              height="100%"
+            />
+          </div>
+
           {/* 왼쪽 페이지 텍스트 박스 렌더링 */}
           {textBoxes
             .filter(box => box.parent === "main")
@@ -366,29 +390,7 @@ const WriteDiary = () => {
                   }
                 }} />
             ))}
-          {isDrawing && (
-            // 그리기 캔버스 표시
-            <div
-              style={{ position: "relative", width: "100%", height: "100%" }}
-            >
-              <ReactSketchCanvas
-                ref={CanvasRef}
-                canvasColor="transparent"
-                style={{
-                  position: "absolute",
-                  top: 0, left: 0, right: 0, bottom: 0,
-                  zIndex: 10,
-                  background: "transparent",
-                  pointerEvents: drawToolbarVisible ? "auto" : "none",
-                }}
-                strokeWidth={lineWidth}
-                eraserWidth={lineWidth}
-                strokeColor={selectedColor}
-                width="100%"
-                height="100%"
-              />
-            </div>
-          )}
+
           {/* 그리기 툴바 표시 */}
           {drawToolbarVisible && (
             <div
@@ -397,7 +399,7 @@ const WriteDiary = () => {
                 top: 100,
                 left: "50%",
                 transform: "translateX(-50%)",
-                zIndex: 10,
+                zIndex: 20,
               }}
             >
               <DrawCustom
@@ -412,6 +414,7 @@ const WriteDiary = () => {
               />
             </div>
           )}
+
           {/* box 영역에 속한 업로드된 이미지 필터링 후 렌더링 */}
           {uploadedImages
             .filter(img => img.parent === "main")
@@ -428,6 +431,7 @@ const WriteDiary = () => {
                 style={{ zIndex: 5 }}
               />
             ))}
+
           {showStickerToolbar && (
             <StickerToolbar
               ref={stickerToolbarRef}
@@ -435,6 +439,7 @@ const WriteDiary = () => {
               onAddSticker={handleAddSticker} // 스티커 선택 시 추가 함수 호출
             />
           )}
+
           {/* 붙여놓은 스티커들 */}
           {addedStickers.map((sticker) => (
             <ImageFile
@@ -448,6 +453,7 @@ const WriteDiary = () => {
               style={{ zIndex: 15 }}
             />
           ))}
+
           {/* 배경색상 툴바 컴포넌트 렌더링 (showBackgroundToolbar가 true일 때만) */}
           {showBackgroundToolbar ? (
             <BackgroundColorToolbar
@@ -522,7 +528,7 @@ const WriteDiary = () => {
       <img src={image2}
         alt="완료"
         className="complete-image"
-        style={{ cursor: "pointer", width: 40, height: 40, position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}
+        style={{ cursor: "pointer", width: 40, height: 40, position: "fixed", bottom: 20, right: "20", zIndex: 1000 }}
         onClick={handleComplete}
       />
     </div>
