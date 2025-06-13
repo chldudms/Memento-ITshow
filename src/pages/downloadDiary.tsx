@@ -67,6 +67,23 @@ const DownloadDiary = () => {
       return;
     }
 
+    // 이메일 형식 검사
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      await Swal.fire({
+        title: '올바른 이메일 형식을 입력해주세요!',
+        icon: undefined,
+        background: '#fff',
+        timer: 1500,
+        showConfirmButton: false,
+        customClass: {
+          popup: 'warn-popup',
+          title: 'warn-title',
+        },
+      });
+      return;
+    }
+
     try {
       // 서버 API 호출 (customId 없이 이메일만 보내면 서버가 최신 다이어리 찾아서 처리)
       const response = await axios.post('http://localhost:5001/send-email', {
