@@ -37,7 +37,8 @@ const WriteDiary = () => {
   const [textBoxes, setTextBoxes] = useState<TextBoxData[]>([]);
 
   // 설정 가능한 색상 리스트와 현재 선택된 색상
-  const colors = ["#000000", "#FFFFFF", "#FF7F9E", "#F6B8B8", "#FFE08A", "#8FD9A8", "#4DB8FF", "#9AA7FF"];
+  const colors = ["#000000", "#FFFFFF", "#FF6F8F", "#F59FA0", "#FFD85C", "#6FD3A6", "#5ABEFF", "#879AFF"];  
+  
   const [selectedColor, setSelectedColor] = useState(colors[0]);
 
   // 현재 선택된 텍스트 박스 ID
