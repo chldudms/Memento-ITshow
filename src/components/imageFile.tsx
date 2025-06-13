@@ -9,7 +9,7 @@ interface ImageFileProps {
     initialTop?: number;
     initialWidth?: number;
     initialHeight?: number;
-    onDelete?: () => void; // 삭제 시 호출할 콜백 함수-
+    onDelete?: () => void;
 }
 
 const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
@@ -31,14 +31,41 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
     // 이미지 위치 상태
     const [position, setPosition] = useState({ x: initialLeft, y: initialTop });
 
-    // 이미지 크기 상태
-    const [size, setSize] = useState({ width: initialWidth, height: initialHeight });
+    // 실제 이미지 크기 상태 (이것이 컨테이너이자 이미지 크기)
+    const [imageSize, setImageSize] = useState({ width: initialWidth, height: initialHeight });
 
     // 이미지 선택/포커스 상태
     const [isFocused, setIsFocused] = useState(false);
 
-    // 리사이즈 중인지 확인하는 상태 (중요!)
+    // 리사이즈 중인지 확인하는 상태
     const [isResizing, setIsResizing] = useState(false);
+
+    // 이미지의 원본 비율
+    const [aspectRatio, setAspectRatio] = useState<number>(1);
+
+    // 이미지 로드 시 원본 비율 계산
+    const handleImageLoad = () => {
+        if (imageRef.current) {
+            const img = imageRef.current;
+            const ratio = img.naturalWidth / img.naturalHeight;
+            setAspectRatio(ratio);
+
+            // 초기 크기를 비율에 맞게 조정
+            if (ratio > 1) {
+                // 가로가 더 긴 이미지
+                setImageSize({
+                    width: initialWidth,
+                    height: initialWidth / ratio
+                });
+            } else {
+                // 세로가 더 긴 이미지
+                setImageSize({
+                    width: initialHeight * ratio,
+                    height: initialHeight
+                });
+            }
+        }
+    };
 
     // 컴포넌트 마운트 시 bounds 설정
     useEffect(() => {
@@ -68,28 +95,25 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
         };
     }, []);
 
-    // useGesture 바인딩 - 리사이즈 중일 때는 드래그 비활성화
+    // useGesture 바인딩
     const bind = useGesture(
         {
             onDrag: ({ delta: [dx, dy], event }) => {
-                // 리사이즈 중이거나 리사이즈 핸들을 클릭한 경우 드래그 무시
                 if (isResizing) return;
 
-                // 리사이즈 핸들 클릭 감지
                 const target = event.target as HTMLElement;
                 if (target.closest('.react-resizable-handle')) {
                     return;
                 }
 
                 setPosition((pos) => {
-                    const newX = Math.min(Math.max(0, pos.x + dx), bounds.width - size.width);
-                    const newY = Math.min(Math.max(0, pos.y + dy), bounds.height - size.height);
+                    const newX = Math.min(Math.max(0, pos.x + dx), bounds.width - imageSize.width);
+                    const newY = Math.min(Math.max(0, pos.y + dy), bounds.height - imageSize.height);
                     return { x: newX, y: newY };
                 });
                 setIsFocused(true);
             },
             onDragStart: ({ event }) => {
-                // 리사이즈 핸들 클릭 시 드래그 시작 방지
                 const target = event.target as HTMLElement;
                 if (target.closest('.react-resizable-handle') || isResizing) {
                     return false;
@@ -99,7 +123,6 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
         },
         {
             drag: {
-                // 리사이즈 중일 때는 드래그 비활성화
                 enabled: !isResizing,
                 filterTaps: true,
                 pointer: { touch: true },
@@ -107,43 +130,45 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
         }
     );
 
-    // 리사이즈 시작 시 호출
     const handleResizeStart = () => {
         setIsResizing(true);
         setIsFocused(true);
     };
 
-    // 리사이즈 중 호출 (실시간 크기 업데이트 방지)
     const handleResize = (
         e: MouseEvent | TouchEvent,
         direction: any,
         ref: HTMLElement,
         delta: { width: number; height: number }
     ) => {
-        // 실시간 크기 업데이트는 하지 않음 (위치 변경 방지)
+        // 비율 유지하면서 실시간 크기 조정
+        const newWidth = ref.offsetWidth;
+        const newHeight = newWidth / aspectRatio;
+
+        // bounds 체크
+        const constrainedWidth = Math.min(newWidth, bounds.width - position.x);
+        const constrainedHeight = Math.min(newHeight, bounds.height - position.y);
+
+        // 가장 제한적인 크기로 조정
+        if (constrainedWidth / aspectRatio <= constrainedHeight) {
+            setImageSize({
+                width: constrainedWidth,
+                height: constrainedWidth / aspectRatio
+            });
+        } else {
+            setImageSize({
+                width: constrainedHeight * aspectRatio,
+                height: constrainedHeight
+            });
+        }
     };
 
-    // 리사이즈 완료 시 호출
     const handleResizeStop = (
         e: MouseEvent | TouchEvent,
         direction: any,
         ref: HTMLElement,
         delta: { width: number; height: number }
     ) => {
-        let newWidth = ref.offsetWidth;
-        let newHeight = ref.offsetHeight;
-
-        // bounds 안에서 크기 제한
-        newWidth = Math.min(newWidth, bounds.width - position.x);
-        newHeight = Math.min(newHeight, bounds.height - position.y);
-
-        // 위치는 그대로 두고 크기만 업데이트
-        setSize({
-            width: newWidth,
-            height: newHeight,
-        });
-
-        // 리사이즈 완료
         setIsResizing(false);
     };
 
@@ -167,34 +192,33 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
     return (
         <div
             ref={containerRef}
-            {...bind()} // useGesture 바인딩
+            {...bind()}
             style={{
                 position: "absolute",
                 top: position.y,
                 left: position.x,
-                width: size.width,
-                height: size.height,
+                width: imageSize.width,
+                height: imageSize.height,
                 touchAction: "none",
-                border: isFocused ? "2px dashed #999" : "none",
+                border: isFocused ? "2px dashed #999" : "none", // 점선 테두리가 이미지 크기와 정확히 일치
                 backgroundColor: "transparent",
                 userSelect: "none",
-                cursor: isResizing ? "default" : "grab", // 리사이즈 중일 때 커서 변경
+                cursor: isResizing ? "default" : "grab",
                 zIndex: style?.zIndex ?? 5,
             }}
             onClick={(e) => {
-                // 리사이즈 핸들 클릭 시 포커스 이벤트 방지
                 if (!(e.target as HTMLElement).closest('.react-resizable-handle')) {
                     setIsFocused(true);
                 }
             }}
         >
             <Resizable
-                size={{ width: size.width, height: size.height }}
-                onResizeStart={handleResizeStart} // 리사이즈 시작
-                onResize={handleResize} // 리사이즈 중 (사용하지 않음)
-                onResizeStop={handleResizeStop} // 리사이즈 완료
+                size={{ width: imageSize.width, height: imageSize.height }}
+                onResizeStart={handleResizeStart}
+                onResize={handleResize}
+                onResizeStop={handleResizeStop}
                 minWidth={50}
-                minHeight={50}
+                minHeight={50 / aspectRatio}
                 maxWidth={bounds.width - position.x}
                 maxHeight={bounds.height - position.y}
                 enable={{ bottomRight: true }}
@@ -215,6 +239,7 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
                         bottom: '-6px',
                     }
                 }}
+                lockAspectRatio={true} // 비율 고정
             >
                 <div
                     onClick={(e) => e.stopPropagation()}
@@ -229,9 +254,10 @@ const ImageFile: React.FC<ImageFileProps & { style?: React.CSSProperties }> = ({
                             height: "100%",
                             pointerEvents: "none",
                             display: "block",
-                            objectFit: "contain", // 이미지 비율 유지
+                            objectFit: "fill", // 컨테이너에 딱 맞게 채움 (여백 없음)
                         }}
                         draggable={false}
+                        onLoad={handleImageLoad}
                     />
                 </div>
             </Resizable>

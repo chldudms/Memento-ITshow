@@ -195,6 +195,7 @@ const WriteDiary = () => {
     setDrawToolbarVisible(true);
     setEraseMode(false);
     setLineWidth(2);
+    setSelectedColor("#000000");
 
     setSelectedTextBoxId(null);  // 텍스트 박스 선택 해제
     setColorPickerVisible(false); // 색상 선택기 숨기기
@@ -212,15 +213,44 @@ const WriteDiary = () => {
       const target = e.target as Node;
       const selectedBox = selectedTextBoxId ? textBoxRefs.current.get(selectedTextBoxId) : null;
 
-      // 클릭한 요소가 선택된 텍스트박스나 커스텀(텍스트) 내부라면 무시
-      if (
-        drawToolbarRef.current?.contains(target) ||
-        selectedBox?.element?.contains(target) ||
-        colorPickerRef.current?.contains(target) ||
-        stickerToolbarRef.current?.contains(target) ||
-        backgroundColorToolbarRef.current?.contains(target)
-      ) {
+      // 항상 무시해야 하는 영역들
+      const alwaysIgnoreAreas = [
+        drawToolbarRef.current,
+        colorPickerRef.current,
+        stickerToolbarRef.current,
+        backgroundColorToolbarRef.current
+      ];
+
+      if (alwaysIgnoreAreas.some(ref => ref?.contains(target))) {
         return;
+      }
+
+      // 선택된 텍스트박스 내부 클릭 시 무시
+      if (selectedBox?.element?.contains(target)) {
+        return;
+      }
+
+      // 그림 모드 관련 처리
+      const isBackgroundBoxClick = backgroundBoxesRef.current?.contains(target);
+
+      if (isDrawing) {
+        // 그림 모드일 때는 backgroundBoxes 클릭 시 그림 모드 유지
+        if (isBackgroundBoxClick) {
+          // 텍스트박스만 선택 해제하고 그림 모드는 유지
+          if (selectedTextBoxId !== null) {
+            const boxRefObj = textBoxRefs.current.get(selectedTextBoxId);
+            const text = boxRefObj?.getText?.();
+            if (text === "") {
+              handleDeleteTextBox(selectedTextBoxId);
+            }
+          }
+          setSelectedTextBoxId(null);
+          return; // 그림 모드는 계속 유지
+        } else {
+          // backgroundBoxes 바깥 클릭 시에만 그림 모드 종료
+          setIsDrawing(false);
+          setDrawToolbarVisible(false);
+        }
       }
 
       // 선택된 텍스트 박스가 비어 있으면 삭제
@@ -232,18 +262,21 @@ const WriteDiary = () => {
         }
       }
 
-      // 바깥 클릭 시 선택 해제 및 커스텀(텍스트) 닫기
+      // 모든 UI 상태 초기화
       setSelectedTextBoxId(null);
       setColorPickerVisible(false);
-      setDrawToolbarVisible(false);
-      setIsDrawing(false);
       setShowStickerToolbar(false);
       setShowBackgroundToolbar(false);
+
+      // 그림 모드가 아직 활성화되어 있지 않다면 툴바도 숨김
+      if (!isDrawing) {
+        setDrawToolbarVisible(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [selectedTextBoxId]);
+  }, [selectedTextBoxId, isDrawing]);
 
   // 텍스트 아이콘 클릭 시 새 텍스트 박스 추가
   const handleTextIconClick = () => {
@@ -299,16 +332,105 @@ const WriteDiary = () => {
     if (!mainBox) return;
 
     try {
-      const canvas = await html2canvas(mainBox, { backgroundColor: null });
-      const imageDataUrl = canvas.toDataURL("image/png");
+      // 캡처 전 렌더링 완료 대기
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      const fixedWidth = 1060.30;
+      const fixedHeight = 583.31;
+
+      const canvas = await html2canvas(mainBox, {
+        backgroundColor: backgroundColor,
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        width: fixedWidth,
+        height: fixedHeight,
+        scrollX: 0,
+        scrollY: 0,
+        onclone: (clonedDoc, element) => {
+          // 배경색 설정
+          const clonedMainBox = element.querySelector('.main-box') as HTMLElement;
+          if (clonedMainBox) {
+            clonedMainBox.style.backgroundColor = backgroundColor;
+            clonedMainBox.style.width = fixedWidth + 'px';
+            clonedMainBox.style.height = fixedHeight + 'px';
+            clonedMainBox.style.overflow = 'hidden';
+          }
+
+          // 이미지 요소들 위치/크기 보정
+          const imageElements = element.querySelectorAll('[class*="image-file"], [src*="sticker"]');
+          imageElements.forEach((img) => {
+            const htmlImg = img as HTMLElement;
+            const originalElement = document.querySelector(`[src="${htmlImg.getAttribute('src')}"]`) as HTMLElement;
+
+            if (originalElement) {
+              const originalRect = originalElement.getBoundingClientRect();
+              const mainBoxRect = mainBox.getBoundingClientRect();
+
+              const relativeLeft = Math.max(0, originalRect.left - mainBoxRect.left);
+              const relativeTop = Math.max(0, originalRect.top - mainBoxRect.top);
+              const width = Math.min(originalRect.width, fixedWidth - relativeLeft);
+              const height = Math.min(originalRect.height, fixedHeight - relativeTop);
+
+              htmlImg.style.position = 'absolute';
+              htmlImg.style.left = relativeLeft + 'px';
+              htmlImg.style.top = relativeTop + 'px';
+              htmlImg.style.width = width + 'px';
+              htmlImg.style.height = height + 'px';
+              htmlImg.style.objectFit = 'contain';
+            }
+          });
+
+          // 텍스트박스 처리
+          const textBoxContainers = element.querySelectorAll('.text-box-container');
+          textBoxContainers.forEach((container) => {
+            const htmlContainer = container as HTMLElement;
+
+            // textarea를 div로 변환
+            const textarea = htmlContainer.querySelector('.text-box-textarea') as HTMLTextAreaElement;
+            if (textarea) {
+              const replacementDiv = clonedDoc.createElement('div');
+              const computedStyle = window.getComputedStyle(textarea);
+
+              replacementDiv.style.cssText = textarea.style.cssText;
+              replacementDiv.style.width = '100%';
+              replacementDiv.style.height = 'auto';
+              replacementDiv.style.fontFamily = computedStyle.fontFamily;
+              replacementDiv.style.fontSize = computedStyle.fontSize;
+              replacementDiv.style.color = computedStyle.color;
+              replacementDiv.style.whiteSpace = 'pre-wrap';
+              replacementDiv.style.border = 'none';
+              replacementDiv.style.backgroundColor = 'transparent';
+              replacementDiv.textContent = textarea.value;
+
+              textarea.parentNode?.replaceChild(replacementDiv, textarea);
+            }
+
+            // 핸들과 테두리 숨기기
+            const dragHandle = htmlContainer.querySelector('.drag-handle') as HTMLElement;
+            const resizeHandle = htmlContainer.querySelector('.resize-handle') as HTMLElement;
+            if (dragHandle) dragHandle.style.display = 'none';
+            if (resizeHandle) resizeHandle.style.display = 'none';
+
+            htmlContainer.classList.remove('selected');
+            htmlContainer.style.border = 'none';
+          });
+
+          // 전체 크기 고정
+          element.style.overflow = 'hidden';
+          element.style.width = fixedWidth + 'px';
+          element.style.height = fixedHeight + 'px';
+        }
+      });
+
+      const imageDataUrl = canvas.toDataURL("image/png", 1.0);
 
       navigate("/previewDiary", {
-        state: {
-          imageDataUrl,       // 캡처된 이미지 데이터 URL
-        },
+        state: { imageDataUrl }
       });
     } catch (error) {
       console.error("캡처 실패:", error);
+      alert("캡처 중 오류가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -345,8 +467,8 @@ const WriteDiary = () => {
       />
 
       {/* 다이어리 본문 좌우 페이지 */}
-      <div className="background-box" style={{ position: "relative" }} ref={backgroundBoxesRef}>
-        <div className="box main-box" style={{ position: "relative", backgroundColor: backgroundColor }}>
+      <div className="background-box" style={{ position: "relative" }}>
+        <div className="box main-box" ref={backgroundBoxesRef} style={{ position: "relative", backgroundColor: backgroundColor }}>
           <div className="date-text">{date}</div>
 
           {/* 그리기 캔버스 - 항상 렌더링, pointerEvents로 활성화/비활성화 제어 */}
@@ -450,7 +572,7 @@ const WriteDiary = () => {
               initialWidth={100}
               initialHeight={100}
               onDelete={() => handleDeleteSticker(sticker.id)}
-              style={{ zIndex: 15 }}
+              style={{ zIndex: 100 }}
             />
           ))}
 
