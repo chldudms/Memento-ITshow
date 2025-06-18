@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../styles/downloaddiary.css';
 import Swal from 'sweetalert2';
 import { colorList } from "../constants/colorList";
+import { display } from "html2canvas/dist/types/css/property-descriptors/display";
 
 const DownloadDiary = () => {
   const [email, setEmail] = useState('');
@@ -130,7 +131,7 @@ const DownloadDiary = () => {
         <div className='d-strap' style={{ backgroundColor: strapColor }} />
         <div className='d-label' />
 
-        <img src={`img/${sticker}.png`} className="diarySticker" />
+        <img src={`img/${sticker}.png`} className="diarySticker" style={{display: sticker.length==0?"none":"block"}}/>
       </div>
 
       {/* 이메일 입력 */}
