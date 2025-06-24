@@ -1,46 +1,14 @@
-# Getting Started with Create React App
+![image](https://github.com/user-attachments/assets/e8fe6c31-af2e-4091-8603-df684c04d56b)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 서비스 개요
+Memento는 표지 색상, 제목, 스티커 등을 활용해 자유롭게 꾸밀 수 있는 맞춤형 다이어리 웹 서비스입니다.
+텍스트, 이미지, 스티커 등을 원하는 위치에 배치해
+감각적이고 개성 있는 다이어리를 완성할 수 있으며,
+다이어리 비밀번호 설정을 통해 개인적인 이야기도 안전하게 보관할 수 있습니다.
+누구나 손쉽게 일상을 담아내고, 나만의 방식으로 추억을 기록할 수 있습니다.
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 기획 배경
+요즘 MZ세대 사이에서 다이어리 꾸미기가 유행하고 있지만, 
+스티커나 펜 같은 꾸미기 용품을 사는 데 돈이 많이 들고, 
+기존 다이어리 앱은 단순한 일정 관리에만 집중되어 있어 아쉬움이 많았습니다. 
+그래서 누구나 쉽게, 자유롭게 꾸밀 수 있는 디지털 다이어리 서비스를 만들고자 했습니다.
